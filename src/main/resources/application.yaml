@@ -5,3 +5,9 @@ server:
 spring:
   config:
     import: security.yaml, database.yaml
+  mail:
+    host: "192.168.1.20"
+    port: 1025
+    templates:
+      path: /mail-templates
+
