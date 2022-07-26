@@ -142,12 +142,12 @@ COMMENT ON TABLE "authorities" IS 'Таблица прав для пользов
 CREATE TABLE "user_info"
 (
     "user_id"         bigint       NOT NULL,
-    "name"            varchar(250) NOT NULL,
-    "surname"         varchar(250) NOT NULL,
+    "name"            varchar(250),
+    "surname"         varchar(250),
     "phone"           varchar(250),
     "city"            varchar(250),
     "birthday"        date,
-    "reg_date"        date,
+    "reg_date"        date NOT NULL,
     "activation_code" varchar(250) NOT NULL,
     "created_at"      timestamp default current_timestamp,
     "updated_at"      timestamp default current_timestamp,
