@@ -1,0 +1,9 @@
+spring:
+  mail:
+    host: "192.168.1.20"
+    port: 1025
+    templates:
+      path: /mail-templates
+    sender:
+      address: "no-reply@example.com"
+      name: "NoReply Example"

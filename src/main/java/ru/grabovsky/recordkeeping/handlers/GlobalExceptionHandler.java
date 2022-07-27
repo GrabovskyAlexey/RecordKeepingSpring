@@ -6,6 +6,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import ru.grabovsky.recordkeeping.exceptions.UserAlreadyExistsException;
 import ru.grabovsky.recordkeeping.models.dto.MessageDto;
 import ru.grabovsky.recordkeeping.models.dto.ValidationError;
 import ru.grabovsky.recordkeeping.models.dto.ValidationErrorResponseDto;
@@ -28,6 +29,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BadCredentialsException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public MessageDto onBadCredentialsException(BadCredentialsException e){
+        return new MessageDto(e.getMessage());
+    }
+
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public MessageDto onUserAlreadyExistsException(UserAlreadyExistsException e){
         return new MessageDto(e.getMessage());
     }
 }
