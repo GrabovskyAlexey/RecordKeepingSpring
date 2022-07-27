@@ -15,6 +15,11 @@ import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import ru.grabovsky.recordkeeping.filters.JwtRequestFilter;
 
+/**
+ * Spring Security configuration
+ *
+ * @author GrabovskyAlexey
+ */
 @EnableWebSecurity
 @RequiredArgsConstructor
 @EnableGlobalMethodSecurity(securedEnabled = true)

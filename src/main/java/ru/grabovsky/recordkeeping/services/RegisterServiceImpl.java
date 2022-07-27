@@ -25,6 +25,11 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+/**
+ * Service for register new users
+ *
+ * @author GrabovskyAlexey
+ */
 @Service
 @RequiredArgsConstructor
 public class RegisterServiceImpl implements RegisterService {
