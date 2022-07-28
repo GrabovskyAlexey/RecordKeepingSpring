@@ -4,7 +4,7 @@ server:
     context-path: /app/api
 spring:
   config:
-    import: security.yaml, database.yaml
+    import: security.yaml, database.yaml, mail.yaml
   mail:
     host: "192.168.1.20"
     port: 1025

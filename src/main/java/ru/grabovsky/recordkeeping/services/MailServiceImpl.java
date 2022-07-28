@@ -12,9 +12,9 @@ import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 import ru.grabovsky.recordkeeping.context.HTMLEmailContext;
 import ru.grabovsky.recordkeeping.context.SimpleTextEmailContext;
-import ru.grabovsky.recordkeeping.exceptions.MailTemplateNotFoundException;
-import ru.grabovsky.recordkeeping.exceptions.PrepareMailMessageException;
-import ru.grabovsky.recordkeeping.exceptions.ProcessMailTemplateException;
+import ru.grabovsky.recordkeeping.exceptions.mail.MailTemplateNotFoundException;
+import ru.grabovsky.recordkeeping.exceptions.mail.PrepareMailMessageException;
+import ru.grabovsky.recordkeeping.exceptions.mail.ProcessMailTemplateException;
 import ru.grabovsky.recordkeeping.services.abstaract.MailService;
 
 import javax.mail.MessagingException;
