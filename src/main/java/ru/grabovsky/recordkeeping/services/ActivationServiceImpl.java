@@ -14,6 +14,11 @@ import ru.grabovsky.recordkeeping.repositories.RoleRepository;
 import ru.grabovsky.recordkeeping.repositories.UserRepository;
 import ru.grabovsky.recordkeeping.services.abstaract.ActivationService;
 
+/**
+ * Сервис для подтвержения адреса электронной почты
+ *
+ * @author GrabovskyAlexey
+ */
 @Service
 @RequiredArgsConstructor
 public class ActivationServiceImpl implements ActivationService {
