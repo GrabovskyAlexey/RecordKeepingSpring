@@ -1,0 +1,41 @@
+server:
+  port: 8080
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/rkeeper
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+springdoc:
+  show-actuator: false
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+application:
+  api:
+    version: 1
+    url: api/v${application.api.version}
+  invite:
+    url: localhost:${server.port}/${application.api.url}
+    email-address-from: "example@mail.ru"
+  security:
+    jwt:
+      issuer: recordkeeping
+      access:
+        secret: sdfsdfsef5hrjghjukl3kjol5rt653w4r3w43r54rty6tyui6675r54e6w454e52rtu4y13ty5u
+        lifetime: 60 # в минутах
+      refresh:
+        secret: cx09v8fd09fsghds0fg9ds-0gsd0-g8sd-0gf9sd9gfs09fgsudfg0s-dfg7sdgfsd9gjudisjg
+        lifetime: 14 # в днях
+logging:
+  level:
+    ru:
+      grabovsky: debug
+kafka:
+  server: localhost:9092
