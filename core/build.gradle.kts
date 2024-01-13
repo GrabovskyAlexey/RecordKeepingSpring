@@ -52,9 +52,6 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.springframework.kafka:spring-kafka")
 	implementation("org.mapstruct:mapstruct:1.5.5.Final")
-//	implementation("org.springdoc:springdoc-openapi-data-rest:1.7.0")
-//	implementation("org.springdoc:springdoc-openapi-ui:1.7.0")
-//	implementation("org.springdoc:springdoc-openapi-kotlin:1.7.0")
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0")
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-api:2.3.0")
 	implementation("io.swagger.core.v3:swagger-core:2.2.19")
@@ -67,7 +64,9 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.kafka:spring-kafka-test")
 	testImplementation("org.springframework.security:spring-security-test")
-	implementation("com.auth0:java-jwt:4.4.0")
+	implementation("io.jsonwebtoken:jjwt-api:0.12.3")
+	implementation("io.jsonwebtoken:jjwt-impl:0.12.3")
+	implementation("io.jsonwebtoken:jjwt-jackson:0.12.3")
 }
 
 tasks.withType<KotlinCompile> {

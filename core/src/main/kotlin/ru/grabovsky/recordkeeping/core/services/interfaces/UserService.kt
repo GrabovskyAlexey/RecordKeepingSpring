@@ -4,6 +4,7 @@ import org.springframework.security.core.userdetails.UserDetailsService
 import ru.grabovsky.recordkeeping.api.dto.auth.AuthRequest
 import ru.grabovsky.recordkeeping.api.dto.auth.AuthResponse
 import ru.grabovsky.recordkeeping.api.dto.auth.RegisterRequest
+import ru.grabovsky.recordkeeping.api.dto.utils.TokenDto
 
 /**
  *
@@ -14,5 +15,7 @@ import ru.grabovsky.recordkeeping.api.dto.auth.RegisterRequest
 interface UserService : UserDetailsService {
     fun authenticate(request: AuthRequest): AuthResponse
 
-    fun register(request: RegisterRequest) : AuthResponse
+    fun register(request: RegisterRequest): AuthResponse
+
+    fun confirmEmail(token: TokenDto): AuthResponse
 }

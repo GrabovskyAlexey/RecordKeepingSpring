@@ -22,7 +22,7 @@ data class UserInfo(
 
     @MapsId
     @JoinColumn(name = "user_id", nullable = false)
-    @OneToOne
+    @OneToOne(cascade = [CascadeType.MERGE, CascadeType.PERSIST])
     lateinit var user: User
 
     @Column(name = "name")
@@ -41,7 +41,7 @@ data class UserInfo(
     var birthday: LocalDate? = null
 
     @Column(name = "reg_date", nullable = false)
-    var regDate: LocalDate? = null
+    lateinit var regDate: LocalDate
 
     @CreationTimestamp
     @Column(name = "created_at")

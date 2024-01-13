@@ -21,9 +21,10 @@ application:
   api:
     version: 1
     url: api/v${application.api.version}
-  invite:
-    url: localhost:${server.port}/${application.api.url}
-    email-address-from: "example@mail.ru"
+  mail:
+    url: http://localhost:${server.port}/${application.api.url}
+    sender-email: "stalser.app@mail.ru"
+    sender-name: "NoReply Example"
   security:
     jwt:
       issuer: recordkeeping

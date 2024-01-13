@@ -1,8 +1,8 @@
 -- liquibase formatted sql
 
 -- changeset grabovsky.alexey:add user and roles
-INSERT INTO users (email, password, username, enabled, activated)
-VALUES ('newtest@test.ru', '$2a$12$0lCh0ZBnMJzs0gnluRi1q.00DLal0ILpBWg7xUPlfYv7aKdMQUvPW', 'user', true, true);
+INSERT INTO users (email, password, username, enabled, activated, activation_code)
+VALUES ('newtest@test.ru', '$2a$12$0lCh0ZBnMJzs0gnluRi1q.00DLal0ILpBWg7xUPlfYv7aKdMQUvPW', 'user', true, true, 'kdskdfj-sdfsdflks-sfsdf-fsdfsdfsdf');
 INSERT INTO roles (name, description)
 VALUES ('ROLE_UNACTIVATED_USER', 'Пользователь не подтвердивший адрес электронной почты'),
        ('ROLE_REGISTERED_USER', 'Зарегистрированный пользователь'),

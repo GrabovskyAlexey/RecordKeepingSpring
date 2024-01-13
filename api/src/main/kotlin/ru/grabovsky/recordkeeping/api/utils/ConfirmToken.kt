@@ -1,24 +1,26 @@
 package ru.grabovsky.recordkeeping.api.utils
 
-import java.util.*
-
 data class ConfirmToken(
-    private val email: String,
-    private val code: String,
-    private val type: TokenType
+    val email: String?,
+    val username: String?,
+    val code: String?,
+    val type: TokenType?
 ) {
-    enum class TokenType {
-        REGISTER, INVITE, RESET_PASSWORD;
+    enum class TokenType(val lifetimeInHours: Long) {
+        EMAIL_CONFIRM(72),
+        INVITE(168),
+        RESET_PASSWORD(24),
+        INCORRECT(0);
 
         companion object {
-            fun getByName(name: String?): TokenType? {
-                return if (Objects.isNull(name)) {
-                    null
-                } else valueOf(name!!)
-            }
+            fun getByName(name: String?) = if (name != null) valueOf(name) else INCORRECT
         }
     }
 
     val isValidToken: Boolean
-        get() = Objects.nonNull(email) && Objects.nonNull(code) && Objects.nonNull(type)
+        get() = when (type) {
+            TokenType.EMAIL_CONFIRM, TokenType.RESET_PASSWORD -> email != null && username != null && code != null
+            TokenType.INVITE -> email != null && code != null
+            else -> false
+        }
 }

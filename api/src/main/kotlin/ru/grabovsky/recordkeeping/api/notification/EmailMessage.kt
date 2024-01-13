@@ -1,9 +1,10 @@
 package ru.grabovsky.recordkeeping.api.notification
 
-sealed class EmailMessage(open val from: String,
-                          open val senderDisplayName: String,
-                          open val to: String,
-                          open val receiverDisplayName: String,
-                          open val subject: String) {
-
+sealed class EmailMessage(
+) {
+    open lateinit var from: String
+    open lateinit var senderDisplayName: String
+    open lateinit var to: String
+    open lateinit var receiverDisplayName: String
+    open lateinit var subject: String
 }

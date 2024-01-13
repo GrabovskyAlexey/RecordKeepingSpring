@@ -34,7 +34,7 @@ data class User(
     var isActivated: Boolean = false
 
     @Column(name = "activation_code")
-    var activationCode: String? = null
+    lateinit var activationCode: String
 
     @CreationTimestamp
     @Column(name = "created_at")
@@ -44,7 +44,7 @@ data class User(
     @Column(name = "updated_at")
     var updatedAt: Instant? = null
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user", cascade = [CascadeType.MERGE, CascadeType.PERSIST], orphanRemoval = true)
     lateinit var userInfo: UserInfo
 
     @ManyToMany

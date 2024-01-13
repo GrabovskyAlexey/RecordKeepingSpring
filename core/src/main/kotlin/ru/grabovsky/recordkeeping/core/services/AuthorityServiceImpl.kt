@@ -10,7 +10,7 @@ class AuthorityServiceImpl(
     private val repository: AuthorityRepository
 ) : AuthorityService {
     override fun getDefaultAuthority(): Authority {
-        return findByName("editProfile").orElse(createDefaultAuthority())
+        return findByName("editProfile").orElseGet { createDefaultAuthority() }
     }
 
     override fun findByName(name: String) = repository.findByName(name);

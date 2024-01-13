@@ -13,27 +13,31 @@ import org.springframework.kafka.support.serializer.JsonSerializer
 import ru.grabovsky.recordkeeping.api.notification.SimpleTextEmailMessage
 
 @Configuration
-class KafkaConfig {
+class KafkaConfig(
     @Value("\${kafka.server}")
-    private val bootstrapAddress: String? = null
-    fun producerConfigs(): Map<String, Any?> {
-        val props: MutableMap<String, Any?> = HashMap()
+    private val bootstrapAddress: String
+) {
+
+    fun producerConfigs(): Map<String, Any> {
+        val props: MutableMap<String, Any> = mutableMapOf()
         props[ProducerConfig.BOOTSTRAP_SERVERS_CONFIG] = bootstrapAddress
         props[ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG] =
             StringSerializer::class.java
         props[ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG] = JsonSerializer::class.java
+        props[JsonSerializer.TYPE_MAPPINGS] =
+            "simple:ru.grabovsky.recordkeeping.api.notification.SimpleTextEmailMessage, html:ru.grabovsky.recordkeeping.api.notification.HTMLEmailMessage";
         return props
     }
 
     @Bean
     @ConditionalOnMissingBean(ProducerFactory::class)
-    fun producerFactory(): ProducerFactory<String, SimpleTextEmailMessage> {
+    fun producerFactory(): ProducerFactory<String, Any> {
         return DefaultKafkaProducerFactory(producerConfigs())
     }
 
     @Bean
     @ConditionalOnMissingBean(KafkaTemplate::class)
-    fun kafkaTemplate(): KafkaTemplate<String, SimpleTextEmailMessage> {
+    fun kafkaTemplate(): KafkaTemplate<String, Any> {
         return KafkaTemplate(producerFactory())
     }
 }
