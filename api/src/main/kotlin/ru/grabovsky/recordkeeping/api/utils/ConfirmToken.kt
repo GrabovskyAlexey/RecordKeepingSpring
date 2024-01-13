@@ -10,7 +10,7 @@ data class ConfirmToken(
         EMAIL_CONFIRM(72),
         INVITE(168),
         RESET_PASSWORD(24),
-        INCORRECT(0);
+        INCORRECT(-1);
 
         companion object {
             fun getByName(name: String?) = if (name != null) valueOf(name) else INCORRECT

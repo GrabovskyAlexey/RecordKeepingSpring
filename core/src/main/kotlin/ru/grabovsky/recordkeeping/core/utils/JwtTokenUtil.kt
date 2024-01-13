@@ -103,6 +103,7 @@ class JwtTokenUtil(
             .compact()
     }
 
+    @Suppress("UNCHECKED_CAST")
     fun parseConfirmToken(token: String): ConfirmToken {
         val confirm: Map<String, String> = getAllClaims(token, accessParser).get("confirm", Map::class.java)
             .filterValues { it is String }
@@ -114,7 +115,7 @@ class JwtTokenUtil(
                 confirm["code"],
                 TokenType.getByName(confirm["type"]))
         if (confirmToken.isValidToken) {
-            return confirmToken;
+            return confirmToken
         }
         throw IncorrectConfirmTokenException("Ошибка в данных токена")
     }
