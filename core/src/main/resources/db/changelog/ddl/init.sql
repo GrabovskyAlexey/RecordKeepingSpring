@@ -20,16 +20,16 @@ COMMENT ON TABLE companies IS 'Таблица компании';
 
 CREATE TABLE users
 (
-    id         bigserial           NOT NULL,
-    username   varchar(250) UNIQUE NOT NULL,
-    email      varchar(250) UNIQUE NOT NULL,
-    password   varchar(250)        NOT NULL,
-    enabled    boolean             NOT NULL,
-    activated  boolean             NOT NULL,
-    activation_code varchar(250) NOT NULL,
-    company_id bigint,
-    created_at timestamp default current_timestamp,
-    updated_at timestamp default current_timestamp,
+    id              bigserial           NOT NULL,
+    username        varchar(250) UNIQUE NOT NULL,
+    email           varchar(250) UNIQUE NOT NULL,
+    password        varchar(250)        NOT NULL,
+    enabled         boolean             NOT NULL,
+    activated       boolean             NOT NULL,
+    activation_code varchar(250)        NOT NULL,
+    company_id      bigint,
+    created_at      timestamp default current_timestamp,
+    updated_at      timestamp default current_timestamp,
     CONSTRAINT users_pkey PRIMARY KEY (id),
     CONSTRAINT fk_users_company_id FOREIGN KEY (company_id) REFERENCES companies (id)
 );
@@ -38,7 +38,7 @@ COMMENT ON TABLE users IS 'Таблица пользователей';
 CREATE TABLE contractors
 (
     id         bigserial    NOT NULL,
-    name       varchar(250) NOT NULL,
+    name       varchar(100) NOT NULL,
     company_id bigint       NOT NULL,
     created_at timestamp default current_timestamp,
     updated_at timestamp default current_timestamp,
@@ -50,7 +50,7 @@ COMMENT ON TABLE contractors IS 'Контрагенты';
 CREATE TABLE employees
 (
     id         bigserial    NOT NULL,
-    name       varchar(250) NOT NULL,
+    name       varchar(100) NOT NULL,
     company_id bigint       NOT NULL,
     created_at timestamp default current_timestamp,
     updated_at timestamp default current_timestamp,
@@ -74,11 +74,13 @@ COMMENT ON TABLE invites IS 'Приглашения';
 
 CREATE TABLE projects
 (
-    id         bigserial    NOT NULL,
-    name       varchar(250) NOT NULL,
-    company_id bigint       NOT NULL,
-    created_at timestamp default current_timestamp,
-    updated_at timestamp default current_timestamp,
+    id          bigserial   NOT NULL,
+    short_name  varchar(15) NOT NULL,
+    full_name   varchar(250),
+    description text,
+    company_id  bigint      NOT NULL,
+    created_at  timestamp default current_timestamp,
+    updated_at  timestamp default current_timestamp,
     CONSTRAINT projects_pkey PRIMARY KEY (id),
     CONSTRAINT fk_projects_company_id FOREIGN KEY (company_id) REFERENCES companies (id)
 );
@@ -88,13 +90,13 @@ CREATE TABLE records
 (
     id            bigserial    NOT NULL,
     direction     direction    NOT NULL,
-    mail_number   varchar(250) NOT NULL,
+    mail_number   varchar(50)  NOT NULL,
     reg_date      date         NOT NULL,
     title         varchar(250) NOT NULL,
-    reply         varchar(250),
-    reply_to      varchar(250),
+    reply_id      bigint,
+    reply_to_id   bigint,
     mail_date     date         NOT NULL,
-    description   varchar,
+    description   text,
     color         varchar(7) default '#FFFFFF',
     project_id    bigint,
     employee_id   bigint,
@@ -104,6 +106,8 @@ CREATE TABLE records
     created_at    timestamp  default current_timestamp,
     updated_at    timestamp  default current_timestamp,
     CONSTRAINT records_pkey PRIMARY KEY (id),
+    CONSTRAINT fk_records_reply_id FOREIGN KEY (reply_id) REFERENCES records (id),
+    CONSTRAINT fk_records_reply_to_id FOREIGN KEY (reply_to_id) REFERENCES records (id),
     CONSTRAINT fk_records_company_id FOREIGN KEY (company_id) REFERENCES companies (id),
     CONSTRAINT fk_records_contractors_id FOREIGN KEY (contractor_id) REFERENCES contractors (id),
     CONSTRAINT fk_records_employee_id FOREIGN KEY (employee_id) REFERENCES employees (id),
@@ -132,12 +136,12 @@ CREATE TABLE roles
     description varchar(250) NOT NULL,
     CONSTRAINT roles_pkey PRIMARY KEY (id)
 );
-COMMENT ON TABLE roles IS 'Таблица для ролей позльзователей';
+COMMENT ON TABLE roles IS 'Таблица для ролей пользователей';
 
 CREATE TABLE authorities
 (
     id          bigserial    NOT NULL,
-    name   varchar(250) NOT NULL,
+    name        varchar(250) NOT NULL,
     description varchar(250) NOT NULL,
     CONSTRAINT authorities_pkey PRIMARY KEY (id)
 );
@@ -145,15 +149,15 @@ COMMENT ON TABLE authorities IS 'Таблица прав для пользова
 
 CREATE TABLE user_info
 (
-    user_id         bigint       NOT NULL,
-    name            varchar(250),
-    surname         varchar(250),
-    phone           varchar(250),
-    city            varchar(250),
-    birthday        date,
-    reg_date        date         NOT NULL,
-    created_at      timestamp default current_timestamp,
-    updated_at      timestamp default current_timestamp,
+    user_id    bigint NOT NULL,
+    name       varchar(250),
+    surname    varchar(250),
+    phone      varchar(20),
+    city       varchar(250),
+    birthday   date,
+    reg_date   date   NOT NULL,
+    created_at timestamp default current_timestamp,
+    updated_at timestamp default current_timestamp,
     CONSTRAINT fk_user_details_user_id FOREIGN KEY (user_id) REFERENCES users (id)
 );
 COMMENT ON TABLE user_info IS 'Данные пользователя';

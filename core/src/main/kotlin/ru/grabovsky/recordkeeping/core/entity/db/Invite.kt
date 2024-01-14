@@ -16,8 +16,8 @@ import java.time.Instant
 class Invite (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null
-) {
+    override var id: Long? = null
+): BaseEntity(id) {
 
     @Column(name = "email", nullable = false)
     lateinit var email: String

@@ -17,8 +17,8 @@ import java.time.LocalDate
 data class UserInfo(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null
-) {
+    override var id: Long? = null
+): BaseEntity(id) {
 
     @MapsId
     @JoinColumn(name = "user_id", nullable = false)
@@ -50,17 +50,6 @@ data class UserInfo(
     @UpdateTimestamp
     @Column(name = "updated_at")
     var updatedAt: Instant? = null
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
-        val userInfo = other as UserInfo
-        return id != null && id == userInfo.id
-    }
-
-    override fun hashCode(): Int {
-        return javaClass.hashCode()
-    }
 
     override fun toString(): String {
         return "UserInfo(id=$id, user=$user, name=$name, surname=$surname, phone=$phone, city=$city, birthday=$birthday, regDate=$regDate)"

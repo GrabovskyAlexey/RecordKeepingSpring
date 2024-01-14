@@ -16,8 +16,8 @@ import java.time.Instant
 class Employee(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null
-) {
+    override var id: Long? = null
+): BaseEntity(id) {
 
     @Column(name = "name", nullable = false)
     lateinit var name: String
@@ -36,17 +36,6 @@ class Employee(
 
     @OneToMany(mappedBy = "employee")
     val records: List<Record> = listOf()
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
-        val employee = other as Employee
-        return id != null && id == employee.id
-    }
-
-    override fun hashCode(): Int {
-        return javaClass.hashCode()
-    }
 
     override fun toString(): String {
         return "Employee(id=$id, name='$name', company=$company)"

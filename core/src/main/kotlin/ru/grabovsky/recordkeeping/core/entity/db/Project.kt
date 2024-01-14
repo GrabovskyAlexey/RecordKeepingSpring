@@ -16,11 +16,17 @@ import java.time.Instant
 class Project (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null
-) {
+    override var id: Long? = null
+): BaseEntity(id) {
 
-    @Column(name = "name", nullable = false)
-    lateinit var name: String
+    @Column(name = "short_name", nullable = false)
+    lateinit var shortName: String
+
+    @Column(name = "full_name")
+    var fullName: String? = null
+
+    @Column(name = "description")
+    var description: String? = null
 
     @CreationTimestamp
     @Column(name = "created_at")
@@ -37,18 +43,7 @@ class Project (
     @OneToMany(mappedBy = "project")
     val records: List<Record> = listOf()
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
-        val project = other as Project
-        return id != null && id == project.id
-    }
-
-    override fun hashCode(): Int {
-        return javaClass.hashCode()
-    }
-
     override fun toString(): String {
-        return "Project(id=$id, name='$name', company=$company)"
+        return "Project(id=$id, shortName='$shortName', fullName=$fullName, description=$description)"
     }
 }
