@@ -10,7 +10,6 @@ import org.springframework.kafka.core.DefaultKafkaProducerFactory
 import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.kafka.core.ProducerFactory
 import org.springframework.kafka.support.serializer.JsonSerializer
-import ru.grabovsky.recordkeeping.api.notification.SimpleTextEmailMessage
 
 @Configuration
 class KafkaConfig(
@@ -25,7 +24,7 @@ class KafkaConfig(
             StringSerializer::class.java
         props[ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG] = JsonSerializer::class.java
         props[JsonSerializer.TYPE_MAPPINGS] =
-            "simple:ru.grabovsky.recordkeeping.api.notification.SimpleTextEmailMessage, html:ru.grabovsky.recordkeeping.api.notification.HTMLEmailMessage";
+            "simple:ru.grabovsky.recordkeeping.api.notification.SimpleTextEmailMessage, html:ru.grabovsky.recordkeeping.api.notification.HTMLEmailMessage"
         return props
     }
 

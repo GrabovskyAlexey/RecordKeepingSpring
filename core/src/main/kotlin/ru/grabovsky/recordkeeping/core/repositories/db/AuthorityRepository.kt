@@ -13,5 +13,5 @@ import java.util.*
  */
 @Repository
 interface AuthorityRepository: JpaRepository<Authority, Long> {
-    fun findByName(name: String): Optional<Authority>;
+    fun findByName(name: String): Optional<Authority>
 }

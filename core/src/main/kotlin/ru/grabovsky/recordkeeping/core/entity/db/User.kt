@@ -57,13 +57,13 @@ data class User(
 
     @ManyToOne
     @JoinColumn(name = "company_id")
-    lateinit var company: Company;
+    lateinit var company: Company
 
     @OneToMany(mappedBy = "author")
-    val records: Set<Record> = setOf();
+    val records: Set<Record> = setOf()
 
     @OneToMany(mappedBy = "user")
-    val userActions: Set<UserAction> = setOf();
+    val userActions: Set<UserAction> = setOf()
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

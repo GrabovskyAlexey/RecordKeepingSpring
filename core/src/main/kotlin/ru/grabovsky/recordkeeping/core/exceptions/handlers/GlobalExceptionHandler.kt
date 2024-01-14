@@ -22,7 +22,7 @@ class GlobalExceptionHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     fun catchRegisterException(e: BadRequestException): MessageDto {
-        log.warn("Catch exception ${e.javaClass.simpleName} Message: ${e.message}");
+        log.warn("Catch exception ${e.javaClass.simpleName} Message: ${e.message}")
         return MessageDto(e.message!!)
     }
 

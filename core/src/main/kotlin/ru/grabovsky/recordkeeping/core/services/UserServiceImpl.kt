@@ -114,8 +114,8 @@ class UserServiceImpl(
             user.isActivated ->
                 throw UserConfirmEmailException("Электронная почта для пользователя ${confirmToken.username!!} была подтверждена ранее")
         }
-        user.isActivated = true;
-        userRepository.save(user);
+        user.isActivated = true
+        userRepository.save(user)
         return createAuthResponseByUsername(user.username)
     }
 

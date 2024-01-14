@@ -104,7 +104,7 @@ interface UserController {
     /**
      * POST /activate : activate user
      *
-     * @param confirmToken confirmToken Item (required)
+     * @param token confirmToken Item (required)
      * @return Successfully activate user (status code 200)
      * or Bad Request (status code 400)
      * or Unauthorized (status code 401)

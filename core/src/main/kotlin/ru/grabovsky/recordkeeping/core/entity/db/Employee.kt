@@ -35,7 +35,7 @@ class Employee(
     lateinit var company: Company
 
     @OneToMany(mappedBy = "employee")
-    val records: List<Record> = listOf();
+    val records: List<Record> = listOf()
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

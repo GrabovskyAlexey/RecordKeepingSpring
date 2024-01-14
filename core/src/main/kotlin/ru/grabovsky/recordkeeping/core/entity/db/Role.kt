@@ -1,7 +1,6 @@
 package ru.grabovsky.recordkeeping.core.entity.db
 
 import jakarta.persistence.*
-import org.hibernate.Hibernate
 
 /**
  * Entity for roles table
@@ -26,10 +25,10 @@ class Role(
         joinColumns = [JoinColumn(name = "role_id")],
         inverseJoinColumns = [JoinColumn(name = "authority_id")]
     )
-    val authorities: MutableSet<Authority> = mutableSetOf();
+    val authorities: MutableSet<Authority> = mutableSetOf()
 
     @ManyToMany(mappedBy = "roles")
-    val users: Set<User> = setOf();
+    val users: Set<User> = setOf()
 
     override fun toString(): String {
         return "Role(id=$id, role='$name', description='$description')"

@@ -21,7 +21,7 @@ import java.util.stream.Collectors
  */
 @Component
 class JwtRequestFilter(private val jwtTokenUtil: JwtTokenUtil) : OncePerRequestFilter() {
-    private val log = getLogger(javaClass);
+    private val log = getLogger(javaClass)
 
     @Throws(ServletException::class, IOException::class)
     override fun doFilterInternal(
@@ -31,7 +31,7 @@ class JwtRequestFilter(private val jwtTokenUtil: JwtTokenUtil) : OncePerRequestF
     ) {
         val authHeader: String? = request.getHeader("Authorization")
         var username: String? = null
-        var jwt: String = ""
+        var jwt = ""
         if (authHeader != null) {
             if (authHeader.startsWith("Bearer ")) {
                 jwt = authHeader.substring(7)

@@ -107,7 +107,7 @@ class NotificationServiceImpl(
         message.to = token.email ?: ""
         message.receiverDisplayName = token.username ?: ""
         message.subject = type.subject
-        val code = jwtTokenUtil.generateConfirmToken(token);
+        val code = jwtTokenUtil.generateConfirmToken(token)
         message.text = when (type) {
             EmailType.ACTIVATE -> {
                 """

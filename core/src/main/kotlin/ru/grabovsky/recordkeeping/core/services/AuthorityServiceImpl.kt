@@ -13,14 +13,14 @@ class AuthorityServiceImpl(
         return findByName("editProfile").orElseGet { createDefaultAuthority() }
     }
 
-    override fun findByName(name: String) = repository.findByName(name);
+    override fun findByName(name: String) = repository.findByName(name)
 
-    override fun save(authority: Authority) = repository.save(authority);
+    override fun save(authority: Authority) = repository.save(authority)
 
     private fun createDefaultAuthority(): Authority {
         val authority = Authority(
             name = "editProfile", description = "Редактирование профиля"
         )
-        return save(authority);
+        return save(authority)
     }
 }

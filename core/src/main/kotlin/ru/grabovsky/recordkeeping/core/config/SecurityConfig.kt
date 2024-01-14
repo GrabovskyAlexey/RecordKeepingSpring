@@ -33,7 +33,7 @@ class SecurityConfig(private val jwtRequestFilter: JwtRequestFilter) {
             .headers { headers -> headers.frameOptions { opt -> opt.disable() } }
             .exceptionHandling { ex -> ex.authenticationEntryPoint(HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)) }
             .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter::class.java)
-        return  http.build();
+        return  http.build()
     }
 
     @Bean

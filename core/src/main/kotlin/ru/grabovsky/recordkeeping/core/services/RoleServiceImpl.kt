@@ -11,7 +11,7 @@ class RoleServiceImpl(
     private val repository: RoleRepository,
     private val authorityService: AuthorityService
 ) : RoleService {
-    override fun findByName(name: String) = repository.findByName(name);
+    override fun findByName(name: String) = repository.findByName(name)
     override fun save(role: Role) = repository.save(role)
 
     override fun getDefaultRole(): Role {
@@ -22,9 +22,9 @@ class RoleServiceImpl(
         val role = Role(
             name = "ROLE_UNACTIVATED_USER",
             description = "Пользователь не подтвердивший адрес электронной почты"
-        );
-        role.authorities.add(authorityService.getDefaultAuthority());
-        save(role);
-        return role;
+        )
+        role.authorities.add(authorityService.getDefaultAuthority())
+        save(role)
+        return role
     }
 }

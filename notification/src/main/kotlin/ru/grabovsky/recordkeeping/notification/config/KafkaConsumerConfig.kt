@@ -35,9 +35,9 @@ class KafkaConsumerConfig(
         props[ConsumerConfig.GROUP_ID_CONFIG] = groupId
         props[ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java
         props[ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG] = JsonDeserializer::class.java
-        props[JsonDeserializer.USE_TYPE_INFO_HEADERS] = true;
+        props[JsonDeserializer.USE_TYPE_INFO_HEADERS] = true
         props[JsonDeserializer.TYPE_MAPPINGS] =
-            "simple:ru.grabovsky.recordkeeping.api.notification.SimpleTextEmailMessage, html:ru.grabovsky.recordkeeping.api.notification.HTMLEmailMessage";
+            "simple:ru.grabovsky.recordkeeping.api.notification.SimpleTextEmailMessage, html:ru.grabovsky.recordkeeping.api.notification.HTMLEmailMessage"
             return DefaultKafkaConsumerFactory(
                 props, StringDeserializer(), JsonDeserializer(
                     SimpleTextEmailMessage::class.java, false

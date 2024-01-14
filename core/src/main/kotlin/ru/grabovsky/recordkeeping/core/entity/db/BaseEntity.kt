@@ -17,7 +17,7 @@ abstract class BaseEntity(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     open var id: Long? = null
 ) {
-    val isNew get() = id == null;
+    val isNew get() = id == null
 
     override fun equals(obj: Any?): Boolean {
         if (this === obj) return true

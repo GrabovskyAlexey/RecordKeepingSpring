@@ -13,5 +13,5 @@ data class MessageDto(
 
     @Schema(description = "Дата и время сообщения")
     @JsonProperty("date")
-    val date: Date = Date();
+    val date: Date = Date()
 }

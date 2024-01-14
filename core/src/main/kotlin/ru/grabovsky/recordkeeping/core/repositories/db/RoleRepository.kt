@@ -13,5 +13,5 @@ import java.util.Optional
  */
 @Repository
 interface RoleRepository: JpaRepository<Role, Long> {
-    fun findByName(name: String): Optional<Role>;
+    fun findByName(name: String): Optional<Role>
 }
