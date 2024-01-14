@@ -1,0 +1,33 @@
+server:
+  port: 8081
+spring:
+  mail:
+    host: "smtp.mail.ru"
+    port: 465
+    username: "stalser.app@mail.ru"
+    password: "BjyZEg5T1mC268dbn5rw"
+    templates:
+      path: /mail-templates
+    properties:
+      mail:
+        transport:
+          protocol: smtp
+        smtp:
+          ssl:
+            enable: true
+          auth: true
+  kafka:
+    consumer:
+      properties:
+        spring.json.trusted.packages: "ru.grabovsky.recordkeeping.api.notification.SimpleTextEmailMessage"
+kafka:
+  group-id: notify
+  server: localhost:9092
+debug: true
+logging:
+  level:
+    org:
+      springframework:
+        boot:
+          autoconfigure:
+            logging: INFO
