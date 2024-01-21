@@ -37,17 +37,6 @@ class Invite (
     @JoinColumn(name = "company_id", nullable = false)
     lateinit var company: Company
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
-        val invite = other as Invite
-        return id != null && id == invite.id
-    }
-
-    override fun hashCode(): Int {
-        return javaClass.hashCode()
-    }
-
     override fun toString(): String {
         return "Invite(id=$id, email='$email', inviteCode='$inviteCode', company=$company)"
     }

@@ -8,7 +8,6 @@ plugins {
 	kotlin("plugin.jpa") version "1.9.22"
 	kotlin("plugin.allopen") version "1.9.22"
 	id("org.springdoc.openapi-gradle-plugin") version "1.8.0"
-	id("org.liquibase.gradle") version "2.2.0"
 }
 
 group = "ru.grabovsky.recordkeeping"

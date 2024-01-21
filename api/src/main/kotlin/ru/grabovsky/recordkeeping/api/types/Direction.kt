@@ -1,5 +1,6 @@
 package ru.grabovsky.recordkeeping.api.types
 
+
 /**
  * Enum for column direction in record table
  *
