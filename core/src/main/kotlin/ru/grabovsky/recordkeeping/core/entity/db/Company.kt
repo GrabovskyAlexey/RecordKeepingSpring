@@ -16,10 +16,8 @@ import java.time.Instant
 class Company(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null
-) {
-
-
+    override var id: Long? = null
+): BaseEntity(id) {
     @Column(name = "name", nullable = false)
     lateinit var name: String
 
@@ -50,20 +48,9 @@ class Company(
     val users: List<User> = listOf()
 
     @Column(name = "enabled", nullable = false)
-    var enabled: Boolean = false
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
-        val company = other as Company
-        return id != null && id == company.id
-    }
-
-    override fun hashCode(): Int {
-        return javaClass.hashCode()
-    }
+    var isEnabled: Boolean = false
 
     override fun toString(): String {
-        return "Company(id=$id, name='$name', enabled=$enabled)"
+        return "Company(id=$id, name='$name', enabled=$isEnabled)"
     }
 }

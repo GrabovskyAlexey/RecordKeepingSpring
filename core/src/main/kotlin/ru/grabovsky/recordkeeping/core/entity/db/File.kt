@@ -16,8 +16,8 @@ import java.time.Instant
 class File (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null
-) {
+    override var id: Long? = null
+): BaseEntity(id) {
 
     @Column(name = "path", nullable = false)
     lateinit var path: String
@@ -36,17 +36,6 @@ class File (
     @ManyToOne
     @JoinColumn(name = "record_id", nullable = false)
     lateinit var record: Record
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
-        val file = other as File
-        return id != null && id == file.id
-    }
-
-    override fun hashCode(): Int {
-        return javaClass.hashCode()
-    }
 
     override fun toString(): String {
         return "File(id=$id, path='$path', filename='$filename', record=$record)"

@@ -10,12 +10,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties
  */
 
 @ConfigurationProperties("application.security.jwt")
-class JwtProperties(
+data class JwtProperties(
     val issuer: String,
     val access: InnerJwtProperties,
     val refresh: InnerJwtProperties
 ) {
-
+    data class InnerJwtProperties(val secret: String, val lifetime: Long)
 }
 
-class InnerJwtProperties(val secret: String, val lifetime: Long){}
