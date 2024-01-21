@@ -15,8 +15,8 @@ import java.time.Instant
 data class UserAction (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null
-) {
+    override var id: Long? = null
+): BaseEntity(id) {
 
     @Column(name = "action")
     lateinit var action: String
@@ -31,17 +31,6 @@ data class UserAction (
     @ManyToOne
     @JoinColumn(name = "user_id")
     lateinit var user: User
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
-        val userAction = other as UserAction
-        return id != null && id == userAction.id
-    }
-
-    override fun hashCode(): Int {
-        return javaClass.hashCode()
-    }
 
     override fun toString(): String {
         return "UserLog(id=$id, action='$action', description='$description', user=$user)"

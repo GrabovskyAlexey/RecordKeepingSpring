@@ -1,4 +1,4 @@
-package ru.grabovsky.recordkeeping.core.entity.types
+package ru.grabovsky.recordkeeping.api.types
 
 /**
  * Enum for column direction in record table

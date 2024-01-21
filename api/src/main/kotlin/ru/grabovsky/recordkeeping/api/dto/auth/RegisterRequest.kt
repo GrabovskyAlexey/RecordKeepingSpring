@@ -31,6 +31,5 @@ data class RegisterRequest(
     @Email(message = "Введите корректный адрес электронной почты")
     @Schema(description = "Адрес электронной почты", example = "user@example.com")
     @JsonProperty("email")
-    val email: String
-)
+    val email: String)
 

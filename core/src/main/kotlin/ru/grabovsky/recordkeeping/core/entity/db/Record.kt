@@ -6,7 +6,7 @@ import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.JdbcType
 import org.hibernate.annotations.UpdateTimestamp
 import org.hibernate.dialect.PostgreSQLEnumJdbcType
-import ru.grabovsky.recordkeeping.core.entity.types.Direction
+import ru.grabovsky.recordkeeping.api.types.Direction
 import java.time.Instant
 import java.time.LocalDate
 
@@ -20,8 +20,8 @@ import java.time.LocalDate
 class Record(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null
-) {
+    override var id: Long? = null
+): BaseEntity(id) {
 
     @Enumerated(EnumType.STRING)
     @JdbcType(PostgreSQLEnumJdbcType::class)
@@ -29,7 +29,7 @@ class Record(
     lateinit var direction: Direction
 
     @Column(name = "color", nullable = false)
-    lateinit var color: String
+    var color: String = "#FFFFFF"
 
     @Column(name = "mail_number", nullable = false)
     lateinit var mailNumber: String
@@ -40,11 +40,13 @@ class Record(
     @Column(name = "title", nullable = false)
     lateinit var title: String
 
-    @Column(name = "reply")
-    var reply: String? = null
+    @OneToMany(mappedBy = "replyTo", cascade = [CascadeType.ALL], orphanRemoval = true)
+    @Column(name = "reply_id")
+    val reply: Set<Record> = setOf()
 
-    @Column(name = "reply_to")
-    var replyTo: String? = null
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "reply_to_id")
+    var replyTo: Record? = null
 
     @Column(name = "mail_date", nullable = false)
     lateinit var mailDate: LocalDate
@@ -82,18 +84,6 @@ class Record(
 
     @OneToMany(mappedBy = "record")
     val files: List<File> = listOf()
-
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
-        val record = other as Record
-        return id != null && id == record.id
-    }
-
-    override fun hashCode(): Int {
-        return javaClass.hashCode()
-    }
 
     override fun toString(): String {
         return "Record(id=$id, direction=$direction, color='$color', mailNumber='$mailNumber', regDate=$regDate, title='$title', reply=$reply, replyTo=$replyTo, mailDate=$mailDate, description=$description, project=$project, employee=$employee, contractor=$contractor, company=$company, author=$author)"
