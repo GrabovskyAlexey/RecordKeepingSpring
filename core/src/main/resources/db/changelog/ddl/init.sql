@@ -1,6 +1,6 @@
 -- liquibase formatted sql
 
--- changeset grabovsky.alexey:init db scheme
+-- changeset grabovsky.alexey:init_db_scheme
 CREATE TYPE direction AS ENUM (
     'IN',
     'OUT',
@@ -27,11 +27,9 @@ CREATE TABLE users
     enabled         boolean             NOT NULL,
     activated       boolean             NOT NULL,
     activation_code varchar(250)        NOT NULL,
-    company_id      bigint,
     created_at      timestamp default current_timestamp,
     updated_at      timestamp default current_timestamp,
-    CONSTRAINT users_pkey PRIMARY KEY (id),
-    CONSTRAINT fk_users_company_id FOREIGN KEY (company_id) REFERENCES companies (id)
+    CONSTRAINT users_pkey PRIMARY KEY (id)
 );
 COMMENT ON TABLE users IS 'Таблица пользователей';
 
@@ -138,6 +136,17 @@ CREATE TABLE roles
 );
 COMMENT ON TABLE roles IS 'Таблица для ролей пользователей';
 
+CREATE TABLE company_roles
+(
+    id          bigserial    NOT NULL,
+    name        varchar(250) NOT NULL,
+    description varchar(250) NOT NULL,
+    created_at timestamp DEFAULT (current_timestamp),
+    updated_at timestamp DEFAULT (current_timestamp),
+    CONSTRAINT company_roles_pkey PRIMARY KEY (id)
+);
+COMMENT ON TABLE company_roles IS 'Таблица для ролей организаций';
+
 CREATE TABLE authorities
 (
     id          bigserial    NOT NULL,
@@ -182,6 +191,16 @@ CREATE TABLE roles_authorities
 );
 COMMENT ON TABLE roles_authorities IS 'ManyToMany для связи ролей и прав';
 
+CREATE TABLE company_roles_authorities
+(
+    authority_id bigint NOT NULL,
+    company_role_id      bigint NOT NULL,
+    CONSTRAINT company_roles_authorities_pkey PRIMARY KEY (authority_id, company_role_id),
+    CONSTRAINT fk_company_role_authority_id FOREIGN KEY (company_role_id) REFERENCES company_roles (id),
+    CONSTRAINT fk_authority_company_role_id FOREIGN KEY (authority_id) REFERENCES authorities (id)
+);
+COMMENT ON TABLE company_roles_authorities IS 'ManyToMany для связи ролей и прав организации';
+
 CREATE TABLE user_actions
 (
     id          bigserial    NOT NULL,
@@ -193,3 +212,25 @@ CREATE TABLE user_actions
     CONSTRAINT fk_user_logs_id FOREIGN KEY (user_id) REFERENCES users (id)
 );
 COMMENT ON TABLE user_actions IS 'Логирование действий пользователей';
+
+CREATE TABLE users_companies
+(
+    user_id bigint NOT NULL,
+    company_id bigint NOT NULL,
+    CONSTRAINT users_companies_pkey PRIMARY KEY (user_id, company_id),
+    CONSTRAINT fk_company_user_id FOREIGN KEY (company_id) REFERENCES companies (id),
+    CONSTRAINT fk_user_company_id FOREIGN KEY (user_id) REFERENCES users (id)
+);
+COMMENT ON TABLE users_companies IS 'ManyToMany для связи пользователей и компаний';
+
+CREATE TABLE companies_users_roles
+(
+    company_id  bigint,
+    user_id bigint,
+    company_role_id bigint,
+    CONSTRAINT companies_users_roles_pkey PRIMARY KEY (company_id, user_id, company_role_id),
+    CONSTRAINT fk_companies_users_roles_company_id FOREIGN KEY (company_id) REFERENCES companies (id),
+    CONSTRAINT fk_companies_users_roles_user_id FOREIGN KEY (user_id) REFERENCES users (id),
+    CONSTRAINT fk_companies_users_roles_role_id FOREIGN KEY (company_role_id) REFERENCES company_roles (id)
+);
+COMMENT ON TABLE companies_users_roles IS 'ManyToMany для связи пользователей, ролей и компаний';

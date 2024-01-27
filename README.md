@@ -21,6 +21,9 @@
 - [ ] Вывод записей
 - [ ] Фильтрация записей
 
+### Роли приложения и организаций по умолчанию
+
+![roles.png](roles.png)
 
 ### Database diagram
 [Схема таблиц БД на dbdiagram.io](https://dbdiagram.io/d/62cd609ccc1bc14cc5a16f38)

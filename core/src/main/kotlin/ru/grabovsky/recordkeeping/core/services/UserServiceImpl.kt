@@ -152,4 +152,8 @@ class UserServiceImpl(
             }
             return result
         }
+
+    override fun getUserById(id: Long): User {
+        return userRepository.findById(id).get();
     }
+}
