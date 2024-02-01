@@ -42,9 +42,9 @@ data class UserInfoDto(
     @JsonProperty("city")
     var city: String? = null,
     @Schema(description = "День рождения пользователя")
-    @JsonProperty("city")
+    @JsonProperty("birthday")
     var birthday: LocalDate? = null,
     @Schema(description = "Дата регистрации пользователя")
-    @JsonProperty("city")
+    @JsonProperty("regDate")
     var regDate: LocalDate
 )

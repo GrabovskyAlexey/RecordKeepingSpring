@@ -1,6 +1,7 @@
 package ru.grabovsky.recordkeeping.core.entity.db
 
 import jakarta.persistence.*
+import ru.grabovsky.recordkeeping.api.types.ApplicationRoleTypes
 
 /**
  * Entity for roles table
@@ -13,8 +14,9 @@ class Role(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     override var id: Long? = null,
+    @Enumerated(EnumType.STRING)
     @Column(name = "name", nullable = false)
-    var name: String,
+    var name: ApplicationRoleTypes,
     @Column(name = "description", nullable = false)
     var description: String
 ): BaseEntity(id){

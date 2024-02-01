@@ -6,7 +6,7 @@ import java.util.*
 
 @Schema(description = "Информационное сообщение или сообщение об ошибке", name = "Message")
 data class MessageDto(
-    @Schema(description = "Информационное сообщение или сообщение об ошибке")
+    @Schema(description = "Информационное сообщение или сообщение об ошибке", example = "Информационное сообщение")
     @JsonProperty("message")
     val message: String
 ) {

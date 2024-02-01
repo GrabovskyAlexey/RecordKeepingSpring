@@ -21,7 +21,21 @@ class GlobalExceptionHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    fun catchRegisterException(e: BadRequestException): MessageDto {
+    fun catchBadRequestException(e: BadRequestException): MessageDto {
+        log.warn("Catch exception ${e.javaClass.simpleName} Message: ${e.message}")
+        return MessageDto(e.message!!)
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    fun catchNotFoundException(e: NotFoundException): MessageDto {
+        log.warn("Catch exception ${e.javaClass.simpleName} Message: ${e.message}")
+        return MessageDto(e.message!!)
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    fun catchForbiddenOperationException(e: ForbiddenOperationException): MessageDto {
         log.warn("Catch exception ${e.javaClass.simpleName} Message: ${e.message}")
         return MessageDto(e.message!!)
     }
