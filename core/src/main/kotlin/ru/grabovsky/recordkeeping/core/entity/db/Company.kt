@@ -46,9 +46,17 @@ class Company(
     @Column(name = "enabled", nullable = false)
     var isEnabled: Boolean = false
 
-    @ElementCollection
-    @CollectionTable(name = "companies_users_roles", joinColumns = [JoinColumn(name = "company_id")])
-    val companyUserRole: MutableSet<CompanyUserRole> = mutableSetOf();
+    @ManyToMany
+    @JoinTable(
+        name = "users_companies",
+        inverseJoinColumns = [JoinColumn(name = "user_id")],
+        joinColumns = [JoinColumn(name = "company_id")]
+    )
+    val users: MutableSet<User> = mutableSetOf()
+
+//    @ElementCollection
+//    @CollectionTable(name = "companies_users_roles", joinColumns = [JoinColumn(name = "company_id")])
+//    val companyUserRole: MutableSet<CompanyUserRolePK> = mutableSetOf();
 
     override fun toString(): String {
         return "Company(id=$id, name='$name', enabled=$isEnabled)"

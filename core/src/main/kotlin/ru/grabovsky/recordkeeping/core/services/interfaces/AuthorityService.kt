@@ -1,5 +1,6 @@
 package ru.grabovsky.recordkeeping.core.services.interfaces
 
+import ru.grabovsky.recordkeeping.api.types.AuthorityTypes
 import ru.grabovsky.recordkeeping.core.entity.db.Authority
 import java.util.*
 
@@ -11,6 +12,6 @@ import java.util.*
  */
 interface AuthorityService {
     fun getDefaultAuthority(): Authority
-    fun findByName(name: String): Optional<Authority>
+    fun findByType(type: AuthorityTypes): Optional<Authority>
     fun save(authority: Authority): Authority
 }

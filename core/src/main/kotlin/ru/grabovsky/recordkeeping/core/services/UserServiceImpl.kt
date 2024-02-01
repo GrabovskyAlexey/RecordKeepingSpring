@@ -3,6 +3,7 @@ package ru.grabovsky.recordkeeping.core.services
 import org.springframework.context.annotation.Lazy
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.Authentication
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
@@ -13,6 +14,7 @@ import ru.grabovsky.recordkeeping.api.dto.auth.AuthRequest
 import ru.grabovsky.recordkeeping.api.dto.auth.AuthResponse
 import ru.grabovsky.recordkeeping.api.dto.auth.RegisterRequest
 import ru.grabovsky.recordkeeping.api.dto.utils.TokenDto
+import ru.grabovsky.recordkeeping.api.types.ApplicationRoleTypes
 import ru.grabovsky.recordkeeping.api.utils.ConfirmToken
 import ru.grabovsky.recordkeeping.api.utils.ConfirmToken.TokenType
 import ru.grabovsky.recordkeeping.core.entity.db.Role
@@ -27,8 +29,10 @@ import ru.grabovsky.recordkeeping.core.services.interfaces.NotificationService
 import ru.grabovsky.recordkeeping.core.services.interfaces.RoleService
 import ru.grabovsky.recordkeeping.core.services.interfaces.UserService
 import ru.grabovsky.recordkeeping.core.utils.JwtTokenUtil
+import java.security.Principal
 import java.time.LocalDate
 import java.util.*
+import javax.management.relation.RoleNotFoundException
 
 @Service
 class UserServiceImpl(
@@ -109,11 +113,15 @@ class UserServiceImpl(
 
         when {
             user.email != confirmToken.email || confirmToken.code != user.activationCode ->
-                throw UserConfirmEmailException("Не удалось подтвердить адрес электронной почты для пользователя ${confirmToken.username!!}")
+                throw UserConfirmEmailException("Не удалось подтвердить адрес электронной почты для пользователя ${confirmToken.username}")
 
             user.isActivated ->
-                throw UserConfirmEmailException("Электронная почта для пользователя ${confirmToken.username!!} была подтверждена ранее")
+                throw UserConfirmEmailException("Электронная почта для пользователя ${confirmToken.username} была подтверждена ранее")
         }
+        val role = roleService.findByName("ROLE_REGISTERED_USER")
+            .orElseThrow { RoleNotFoundException("Не найдена роль зарегистрированного пользователя") }
+        user.roles.clear()
+        user.roles.add(role)
         user.isActivated = true
         userRepository.save(user)
         return createAuthResponseByUsername(user.username)
@@ -143,10 +151,10 @@ class UserServiceImpl(
         private fun getRolesAndPrivileges(roles: Collection<Role>): Collection<String> {
             val result: MutableSet<String> = HashSet()
             for (role in roles) {
-                result.add(role.name)
+                result.add(role.name.toString())
                 result.addAll(
                     role.authorities
-                        .map { it.name }
+                        .map { it.type.toString() }
                         .toSet()
                 )
             }
@@ -155,5 +163,26 @@ class UserServiceImpl(
 
     override fun getUserById(id: Long): User {
         return userRepository.findById(id).get();
+    }
+
+    override fun getUserByUsername(username: String): User {
+        return userRepository.findByUsername(username).orElseThrow { UserNotFoundException("Пользователь $username не найден") }
+    }
+
+    override fun isAdmin(principal: Principal): Boolean {
+        if(principal is Authentication) {
+            return principal.authorities.any { it.authority.equals(ApplicationRoleTypes.ROLE_APP_ADMIN.toString()) }
+        }
+        return false;
+    }
+
+    override fun isActivatedUser(principal: Principal): Boolean {
+        if(principal is Authentication) {
+            return principal.authorities.any {
+                it.authority.equals(ApplicationRoleTypes.ROLE_APP_ADMIN.toString())
+                        || it.authority.equals(ApplicationRoleTypes.ROLE_ACTIVATED_USER.toString())
+            }
+        }
+        return false;
     }
 }

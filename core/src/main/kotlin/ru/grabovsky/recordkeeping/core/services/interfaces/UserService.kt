@@ -6,6 +6,7 @@ import ru.grabovsky.recordkeeping.api.dto.auth.AuthResponse
 import ru.grabovsky.recordkeeping.api.dto.auth.RegisterRequest
 import ru.grabovsky.recordkeeping.api.dto.utils.TokenDto
 import ru.grabovsky.recordkeeping.core.entity.db.User
+import java.security.Principal
 
 /**
  *
@@ -15,10 +16,10 @@ import ru.grabovsky.recordkeeping.core.entity.db.User
  */
 interface UserService : UserDetailsService {
     fun authenticate(request: AuthRequest): AuthResponse
-
     fun register(request: RegisterRequest): AuthResponse
-
     fun confirmEmail(token: TokenDto): AuthResponse
-
     fun getUserById(id: Long): User
+    fun getUserByUsername(username: String): User
+    fun isAdmin(principal: Principal): Boolean
+    fun isActivatedUser(principal: Principal): Boolean
 }

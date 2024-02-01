@@ -8,7 +8,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
-import org.springframework.web.bind.annotation.*
+import org.springframework.validation.annotation.Validated
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.ResponseStatus
 import ru.grabovsky.recordkeeping.api.dto.auth.AuthRequest
 import ru.grabovsky.recordkeeping.api.dto.auth.AuthResponse
 import ru.grabovsky.recordkeeping.api.dto.auth.RegisterRequest
@@ -22,6 +25,7 @@ import ru.grabovsky.recordkeeping.api.dto.utils.TokenDto
  * @date 03.01.2024
  */
 
+@Validated
 @Tag(name = "user", description = "Контроллер для работы с пользователями")
 interface UserController {
     /**
@@ -112,17 +116,18 @@ interface UserController {
      */
     @Operation(
         operationId = "activate",
-        summary = "Активация",
+        summary = "Подтверждение адреса эл.почты",
         tags = ["user"],
         responses = [ApiResponse(
             responseCode = "200",
-            description = "Успешная активация",
+            description = "Успешное подтверждение адреса эл.почты",
             content = [Content(mediaType = "application/json", schema = Schema(implementation = AuthResponse::class))]
         ), ApiResponse(
             responseCode = "400",
             description = "Bad Request",
             content = [Content(mediaType = "application/json", schema = Schema(implementation = MessageDto::class))]
-        ), ApiResponse(responseCode = "401", description = "Unauthorized"), ApiResponse(
+        ), ApiResponse(
+            responseCode = "401", description = "Unauthorized"), ApiResponse(
             responseCode = "403",
             description = "Forbidden"
         )]

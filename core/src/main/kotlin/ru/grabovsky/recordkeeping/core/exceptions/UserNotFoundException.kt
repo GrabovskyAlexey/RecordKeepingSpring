@@ -1,3 +1,3 @@
 package ru.grabovsky.recordkeeping.core.exceptions
 
-class UserNotFoundException(message: String?) : BadRequestException(message)
+class UserNotFoundException(message: String?) : NotFoundException(message)

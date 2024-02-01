@@ -1,6 +1,7 @@
 package ru.grabovsky.recordkeeping.core.services
 
 import org.springframework.stereotype.Service
+import ru.grabovsky.recordkeeping.api.types.ApplicationRoleTypes
 import ru.grabovsky.recordkeeping.core.entity.db.Role
 import ru.grabovsky.recordkeeping.core.repositories.db.RoleRepository
 import ru.grabovsky.recordkeeping.core.services.interfaces.AuthorityService
@@ -20,7 +21,7 @@ class RoleServiceImpl(
 
     private fun createDefaultRole(): Role {
         val role = Role(
-            name = "ROLE_UNACTIVATED_USER",
+            name = ApplicationRoleTypes.ROLE_UNACTIVATED_USER,
             description = "Пользователь не подтвердивший адрес электронной почты"
         )
         role.authorities.add(authorityService.getDefaultAuthority())

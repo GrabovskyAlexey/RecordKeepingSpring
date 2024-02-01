@@ -18,7 +18,11 @@ import ru.grabovsky.recordkeeping.core.filters.JwtRequestFilter
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity
+@EnableMethodSecurity(
+    prePostEnabled = true,
+    securedEnabled = true,
+    jsr250Enabled = true
+)
 class SecurityConfig(private val jwtRequestFilter: JwtRequestFilter) {
 
     @Bean

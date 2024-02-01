@@ -14,7 +14,7 @@ import java.time.LocalDate
  */
 @Entity
 @Table(name = "user_info")
-data class UserInfo(
+class UserInfo(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     override var id: Long? = null

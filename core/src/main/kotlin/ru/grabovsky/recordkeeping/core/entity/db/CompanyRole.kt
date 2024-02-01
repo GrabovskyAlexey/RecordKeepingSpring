@@ -1,6 +1,7 @@
 package ru.grabovsky.recordkeeping.core.entity.db
 
 import jakarta.persistence.*
+import ru.grabovsky.recordkeeping.api.types.CompanyRoleTypes
 
 /**
  * Entity for roles table
