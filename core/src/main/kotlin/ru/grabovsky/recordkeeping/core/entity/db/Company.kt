@@ -1,7 +1,6 @@
 package ru.grabovsky.recordkeeping.core.entity.db
 
 import jakarta.persistence.*
-import org.hibernate.Hibernate
 import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.UpdateTimestamp
 import java.time.Instant
@@ -44,11 +43,20 @@ class Company(
     @OneToMany(mappedBy = "company")
     val records: List<Record> = listOf()
 
-    @OneToMany(mappedBy = "company")
-    val users: List<User> = listOf()
-
     @Column(name = "enabled", nullable = false)
     var isEnabled: Boolean = false
+
+    @ManyToMany
+    @JoinTable(
+        name = "users_companies",
+        inverseJoinColumns = [JoinColumn(name = "user_id")],
+        joinColumns = [JoinColumn(name = "company_id")]
+    )
+    val users: MutableSet<User> = mutableSetOf()
+
+//    @ElementCollection
+//    @CollectionTable(name = "companies_users_roles", joinColumns = [JoinColumn(name = "company_id")])
+//    val companyUserRole: MutableSet<CompanyUserRolePK> = mutableSetOf();
 
     override fun toString(): String {
         return "Company(id=$id, name='$name', enabled=$isEnabled)"

@@ -1,92 +1,114 @@
 -- liquibase formatted sql
 
--- changeset grabovsky.alexey:add user and roles
+-- changeset grabovsky.alexey:add_users
 INSERT INTO users (email, password, username, enabled, activated, activation_code)
-VALUES ('newtest@test.ru', '$2a$12$0lCh0ZBnMJzs0gnluRi1q.00DLal0ILpBWg7xUPlfYv7aKdMQUvPW', 'user', true, true, 'kdskdfj-sdfsdflks-sfsdf-fsdfsdfsdf');
-INSERT INTO roles (name, description)
-VALUES ('ROLE_UNACTIVATED_USER', 'Пользователь не подтвердивший адрес электронной почты'),
-       ('ROLE_REGISTERED_USER', 'Зарегистрированный пользователь'),
-       ('ROLE_COMPANY_USER', 'Пользователь организации'),
-       ('ROLE_COMPANY_MANAGER', 'Менеджер организации'),
-       ('ROLE_COMPANY_ADMIN', 'Администратор организации'),
-       ('ROLE_APP_ADMIN', 'Администратор приложения');
-INSERT INTO authorities (name, description)
-VALUES ('editProfile', 'Редактирование профиля'),
-       ('registerCompany', 'Регистрация организации'),
-       ('addRecord', 'Добавление записей'),
-       ('addProject', 'Добавление проектов'),
-       ('editProject', 'Изменение проектов'),
-       ('addEmployee', 'Добавление сотрудников'),
-       ('editEmployee', 'Изменение сотрудников'),
-       ('addContractors', 'Добавление контрагентов'),
-       ('editContractors', 'Редактирование контрагентов'),
-       ('editRecord', 'Редактирование записей'),
-       ('inviteUser', 'Приглашение пользователй в организацию'),
-       ('addUser', 'Добавление пользователей в организацию'),
-       ('editCompany', 'Изменение организации'),
-       ('editUserRights', 'Изменение прав пользователей организации'),
-       ('removeUserFromCompany', 'Открепление пользователей от организации'),
-       ('removeUserFromCompany', 'Открепление пользователей от организации'),
-       ('removeProject', 'Удаление проектов'),
-       ('removeEmployee', 'Удаление сотрудников'),
-       ('removeContractor', 'Удаление контрагентов'),
-       ('removeRecord', 'Удаление записей');
-INSERT INTO users_roles (user_id, role_id)
-VALUES (1, 6);
+VALUES ('admin@test.ru', '$2a$12$2IfNzxSnMcn/rpSKT9EvuOMnIR.x6ZHtXUul6ykKsEjAB8pOTOMaO', 'admin', true, true,
+        'temp'), -- pass: admin
+       ('user@test.ru', '$2a$12$0lCh0ZBnMJzs0gnluRi1q.00DLal0ILpBWg7xUPlfYv7aKdMQUvPW', 'user', true, true,
+        'temp'); -- pass: user;
 
+-- changeset grabovsky.alexey:add_company
+INSERT INTO companies (name, enabled)
+VALUES ('Тестовая компания', true);
+
+
+-- changeset grabovsky.alexey:add_application_roles
+INSERT INTO roles (name, description)
+VALUES ('ROLE_UNACTIVATED_USER', 'Зарегистрированный пользователь не подтвердивший адрес электронной почты'),   -- 1
+       ('ROLE_ACTIVATED_USER', 'Зарегистрированный пользователь подтвердивший адрес электронной почты'),        -- 2
+       ('ROLE_APP_ADMIN', 'Администратор приложения');                                                          -- 3
+
+-- changeset grabovsky.alexey:add_authorities
+INSERT INTO authorities (type, description)
+VALUES ('EDIT_PROFILE', 'Редактирование профиля'),
+       ('REGISTER_COMPANY', 'Регистрация организации'),
+       ('ADD_RECORD', 'Добавление записей'),
+       ('ADD_PROJECT', 'Добавление проектов'),
+       ('EDIT_PROJECT', 'Изменение проектов'),
+       ('ADD_EMPLOYEE', 'Добавление сотрудников'),
+       ('EDIT_EMPLOYEE', 'Изменение сотрудников'),
+       ('ADD_CONTRACTOR', 'Добавление контрагентов'),
+       ('EDIT_CONTRACTOR', 'Редактирование контрагентов'),
+       ('EDIT_RECORD', 'Редактирование записей'),
+       ('INVITE_USER', 'Приглашение пользователй в организацию'),
+       ('ADD_USER', 'Добавление пользователей в организацию'),
+       ('EDIT_COMPANY', 'Изменение организации'),
+       ('EDIT_USER_RIGHT', 'Изменение прав пользователей организации'),
+       ('REMOVE_USER_FROM_COMPANY', 'Открепление пользователей от организации'),
+       ('REMOVE_PROJECT', 'Удаление проектов'),
+       ('REMOVE_EMPLOYEE', 'Удаление сотрудников'),
+       ('REMOVE_CONTRACTOR', 'Удаление контрагентов'),
+       ('REMOVE_RECORD', 'Удаление записей');
+
+-- changeset grabovsky.alexey:add_company_roles
+INSERT INTO company_roles (name, description)
+VALUES ('ROLE_COMPANY_USER', 'Пользователь организации'),        -- 1
+       ('ROLE_COMPANY_MANAGER', 'Менеджер организации'),         -- 2
+       ('ROLE_COMPANY_ADMIN', 'Администратор организации');      -- 3
+
+-- changeset grabovsky.alexey:link_roles_and_authorities
 INSERT INTO roles_authorities (role_id, authority_id)
 VALUES (1, 1),
        (2, 1),
        (2, 2),
        (3, 1),
+       (3, 2),
        (3, 3),
-       (4, 1),
-       (4, 3),
-       (4, 4),
-       (4, 5),
-       (4, 6),
-       (4, 7),
-       (4, 8),
-       (4, 9),
-       (4, 10),
-       (4, 11),
-       (4, 12),
-       (5, 1),
-       (5, 3),
-       (5, 4),
-       (5, 5),
-       (5, 6),
-       (5, 7),
-       (5, 8),
-       (5, 9),
-       (5, 10),
-       (5, 11),
-       (5, 12),
-       (5, 13),
-       (5, 14),
-       (5, 15),
-       (5, 16),
-       (5, 17),
-       (5, 18),
-       (5, 19),
-       (5, 20),
-       (6, 1),
-       (6, 2),
-       (6, 3),
-       (6, 4),
-       (6, 5),
-       (6, 6),
-       (6, 7),
-       (6, 8),
-       (6, 9),
-       (6, 10),
-       (6, 11),
-       (6, 12),
-       (6, 13),
-       (6, 14),
-       (6, 15),
-       (6, 16),
-       (6, 17),
-       (6, 18),
-       (6, 19),
-       (6, 20);
+       (3, 4),
+       (3, 5),
+       (3, 6),
+       (3, 7),
+       (3, 8),
+       (3, 9),
+       (3, 10),
+       (3, 11),
+       (3, 12),
+       (3, 13),
+       (3, 14),
+       (3, 15),
+       (3, 16),
+       (3, 17),
+       (3, 18),
+       (3, 19);
+
+-- changeset grabovsky.alexey:link_users_and_application_roles
+INSERT INTO users_roles (user_id, role_id)
+VALUES (1, 3),
+       (2, 2);
+
+-- changeset grabovsky.alexey:link_company_roles_and_authorities
+INSERT INTO company_roles_authorities (company_role_id, authority_id)
+VALUES (1, 3),
+       (2, 3),
+       (2, 4),
+       (2, 5),
+       (2, 6),
+       (2, 7),
+       (2, 8),
+       (2, 9),
+       (2, 10),
+       (2, 11),
+       (2, 12),
+       (3, 3),
+       (3, 4),
+       (3, 5),
+       (3, 6),
+       (3, 7),
+       (3, 8),
+       (3, 9),
+       (3, 10),
+       (3, 11),
+       (3, 12),
+       (3, 13),
+       (3, 14),
+       (3, 15),
+       (3, 16),
+       (3, 17),
+       (3, 18),
+       (3, 19);
+
+-- changeset grabovsky.alexey:link_user_company_roles_and_company
+INSERT INTO companies_users_roles (company_id, user_id, company_role_id) VALUES (1, 2, 3);
+
+-- changeset grabovsky.alexey:link_user_and_company
+INSERT INTO users_companies (user_id, company_id) VALUES (2, 1);

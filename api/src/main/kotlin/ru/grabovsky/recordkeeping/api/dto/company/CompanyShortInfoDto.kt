@@ -6,7 +6,6 @@ import ru.grabovsky.recordkeeping.api.dto.contractor.ContractorDto
 import ru.grabovsky.recordkeeping.api.dto.employee.EmployeeDto
 import ru.grabovsky.recordkeeping.api.dto.invite.InviteDto
 import ru.grabovsky.recordkeeping.api.dto.project.ProjectDto
-import ru.grabovsky.recordkeeping.api.dto.record.RecordDto
 import ru.grabovsky.recordkeeping.api.dto.user.UserDto
 import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.Size
@@ -18,8 +17,8 @@ import javax.validation.constraints.Size
  * @date 14.01.2024
  */
 
-@Schema(description = "Организация", name = "Company")
-data class CompanyDto(
+@Schema(description = "Краткая информация по организации", name = "CompanyShortInfo")
+data class CompanyShortInfoDto(
     @Schema(description = "id организации", example = "1")
     @JsonProperty("id")
     val id: Long? = null,
@@ -30,23 +29,4 @@ data class CompanyDto(
     val name: String,
     @Schema(description = "Организация действующая?", example = "true")
     @JsonProperty("isEnabled")
-    val isEnabled: Boolean = false,
-    @Schema(description = "Список контрагентов")
-    @JsonProperty("contractors")
-    val contractors: List<ContractorDto> = listOf(),
-    @Schema(description = "Список сотрудников")
-    @JsonProperty("employees")
-    val employees: List<EmployeeDto> = listOf(),
-    @Schema(description = "Список приглашений")
-    @JsonProperty("invites")
-    val invites: List<InviteDto> = listOf(),
-    @Schema(description = "Список проектов")
-    @JsonProperty("projects")
-    val projects: List<ProjectDto> = listOf(),
-    @Schema(description = "Список записей")
-    @JsonProperty("records")
-    val records: List<RecordDto> = listOf(),
-    @Schema(description = "Список пользователей")
-    @JsonProperty("users")
-    val users: List<UserDto> = listOf()
-)
+    val isEnabled: Boolean = false)

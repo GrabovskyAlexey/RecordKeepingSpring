@@ -12,7 +12,7 @@ import java.time.Instant
  */
 @Entity
 @Table(name = "user_actions")
-data class UserAction (
+class UserAction (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     override var id: Long? = null

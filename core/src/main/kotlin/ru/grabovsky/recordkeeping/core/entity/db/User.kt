@@ -13,7 +13,7 @@ import java.time.Instant
  */
 @Entity
 @Table(name = "users")
-data class User(
+class User(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     override var id: Long? = null
@@ -55,9 +55,13 @@ data class User(
     )
     val roles: MutableSet<Role> = mutableSetOf()
 
-    @ManyToOne
-    @JoinColumn(name = "company_id")
-    lateinit var company: Company
+    @ManyToMany
+    @JoinTable(
+        name = "users_companies",
+        joinColumns = [JoinColumn(name = "user_id")],
+        inverseJoinColumns = [JoinColumn(name = "company_id")]
+    )
+    val companies: MutableSet<Company> = mutableSetOf()
 
     @OneToMany(mappedBy = "author")
     val records: Set<Record> = setOf()
@@ -66,6 +70,6 @@ data class User(
     val userActions: Set<UserAction> = setOf()
 
     override fun toString(): String {
-        return "User(id=$id, username='$username', password='$password', email='$email', isEnabled=$isEnabled, isActivated=$isActivated, userInfo=$userInfo, company=$company)"
+        return "User(id=$id, username='$username', password='$password', email='$email', isEnabled=$isEnabled, isActivated=$isActivated, userInfo=$userInfo)"
     }
 }

@@ -1,5 +1,7 @@
 package ru.grabovsky.recordkeeping.core.config
 
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType
+import io.swagger.v3.oas.annotations.security.SecurityScheme
 import io.swagger.v3.oas.models.Components
 import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.info.Info
@@ -14,6 +16,12 @@ import org.springframework.context.annotation.Configuration
  * @date 30.12.2023
  */
 @Configuration
+@SecurityScheme(
+    name = "JWTAuth",
+    type = SecuritySchemeType.HTTP,
+    bearerFormat = "JWT",
+    scheme = "bearer"
+)
 class SwaggerConfig {
     @Bean
     fun apiInfo(): OpenAPI {
