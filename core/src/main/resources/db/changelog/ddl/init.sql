@@ -141,8 +141,8 @@ CREATE TABLE company_roles
     id          bigserial    NOT NULL,
     name        varchar(250) NOT NULL,
     description varchar(250) NOT NULL,
-    created_at timestamp DEFAULT (current_timestamp),
-    updated_at timestamp DEFAULT (current_timestamp),
+    created_at  timestamp DEFAULT (current_timestamp),
+    updated_at  timestamp DEFAULT (current_timestamp),
     CONSTRAINT company_roles_pkey PRIMARY KEY (id)
 );
 COMMENT ON TABLE company_roles IS 'Таблица для ролей организаций';
@@ -150,7 +150,7 @@ COMMENT ON TABLE company_roles IS 'Таблица для ролей органи
 CREATE TABLE authorities
 (
     id          bigserial    NOT NULL,
-    name        varchar(250) NOT NULL,
+    type        varchar(50)  NOT NULL,
     description varchar(250) NOT NULL,
     CONSTRAINT authorities_pkey PRIMARY KEY (id)
 );
@@ -193,8 +193,8 @@ COMMENT ON TABLE roles_authorities IS 'ManyToMany для связи ролей �
 
 CREATE TABLE company_roles_authorities
 (
-    authority_id bigint NOT NULL,
-    company_role_id      bigint NOT NULL,
+    authority_id    bigint NOT NULL,
+    company_role_id bigint NOT NULL,
     CONSTRAINT company_roles_authorities_pkey PRIMARY KEY (authority_id, company_role_id),
     CONSTRAINT fk_company_role_authority_id FOREIGN KEY (company_role_id) REFERENCES company_roles (id),
     CONSTRAINT fk_authority_company_role_id FOREIGN KEY (authority_id) REFERENCES authorities (id)
@@ -215,7 +215,7 @@ COMMENT ON TABLE user_actions IS 'Логирование действий пол
 
 CREATE TABLE users_companies
 (
-    user_id bigint NOT NULL,
+    user_id    bigint NOT NULL,
     company_id bigint NOT NULL,
     CONSTRAINT users_companies_pkey PRIMARY KEY (user_id, company_id),
     CONSTRAINT fk_company_user_id FOREIGN KEY (company_id) REFERENCES companies (id),
@@ -225,8 +225,8 @@ COMMENT ON TABLE users_companies IS 'ManyToMany для связи пользов
 
 CREATE TABLE companies_users_roles
 (
-    company_id  bigint,
-    user_id bigint,
+    company_id      bigint,
+    user_id         bigint,
     company_role_id bigint,
     CONSTRAINT companies_users_roles_pkey PRIMARY KEY (company_id, user_id, company_role_id),
     CONSTRAINT fk_companies_users_roles_company_id FOREIGN KEY (company_id) REFERENCES companies (id),

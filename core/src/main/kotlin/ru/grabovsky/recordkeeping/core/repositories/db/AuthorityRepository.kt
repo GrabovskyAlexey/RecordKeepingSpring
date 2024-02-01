@@ -2,6 +2,7 @@ package ru.grabovsky.recordkeeping.core.repositories.db
 
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
+import ru.grabovsky.recordkeeping.api.types.AuthorityTypes
 import ru.grabovsky.recordkeeping.core.entity.db.Authority
 import java.util.*
 
@@ -13,5 +14,5 @@ import java.util.*
  */
 @Repository
 interface AuthorityRepository: JpaRepository<Authority, Long> {
-    fun findByName(name: String): Optional<Authority>
+    fun findByType(type: AuthorityTypes): Optional<Authority>
 }
