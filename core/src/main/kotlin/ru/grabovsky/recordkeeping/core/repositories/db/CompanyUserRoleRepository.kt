@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 import ru.grabovsky.recordkeeping.core.entity.db.CompanyUserRole
 import ru.grabovsky.recordkeeping.core.entity.db.CompanyUserRolePK
-import java.util.Optional
+import java.util.*
 
 /**
  *

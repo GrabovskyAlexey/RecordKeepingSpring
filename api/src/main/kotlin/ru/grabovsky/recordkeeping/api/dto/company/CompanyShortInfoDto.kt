@@ -2,11 +2,6 @@ package ru.grabovsky.recordkeeping.api.dto.company
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import io.swagger.v3.oas.annotations.media.Schema
-import ru.grabovsky.recordkeeping.api.dto.contractor.ContractorDto
-import ru.grabovsky.recordkeeping.api.dto.employee.EmployeeDto
-import ru.grabovsky.recordkeeping.api.dto.invite.InviteDto
-import ru.grabovsky.recordkeeping.api.dto.project.ProjectDto
-import ru.grabovsky.recordkeeping.api.dto.user.UserDto
 import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.Size
 

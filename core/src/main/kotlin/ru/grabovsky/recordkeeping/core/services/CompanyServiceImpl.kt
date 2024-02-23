@@ -10,6 +10,7 @@ import ru.grabovsky.recordkeeping.core.exceptions.ForbiddenOperationException
 import ru.grabovsky.recordkeeping.core.exceptions.NotFoundException
 import ru.grabovsky.recordkeeping.core.mappers.CompanyMapper
 import ru.grabovsky.recordkeeping.core.repositories.db.CompanyRepository
+import ru.grabovsky.recordkeeping.core.services.interfaces.AuthorizationService
 import ru.grabovsky.recordkeeping.core.services.interfaces.CompanyRoleService
 import ru.grabovsky.recordkeeping.core.services.interfaces.CompanyService
 import ru.grabovsky.recordkeeping.core.services.interfaces.UserService
@@ -17,13 +18,14 @@ import java.security.Principal
 
 @Service
 class CompanyServiceImpl(
+    private val companyMapper: CompanyMapper,
     private val companyRepository: CompanyRepository,
+    private val authorizationService: AuthorizationService,
     private val userService: UserService,
-    private val companyRoleService: CompanyRoleService,
-    private val companyMapper: CompanyMapper
+    private val companyRoleService: CompanyRoleService
 ) : CompanyService {
     override fun getAllCompany(principal: Principal): CompanyInfoResponseDto {
-        if (userService.isAdmin(principal)) {
+        if (authorizationService.isAdmin(principal)) {
             return CompanyInfoResponseDto(
                 companyRepository.findAll()
                     .map { companyMapper.fromEntityToShortDto(it) }
@@ -38,7 +40,7 @@ class CompanyServiceImpl(
 
     override fun getCompanyById(id: Long, principal: Principal): CompanyDto {
         val user = userService.getUserByUsername(principal.name)
-        if (userService.isAdmin(principal) || companyRoleService.userHasAuthority(
+        if (authorizationService.isAdmin(principal) || authorizationService.userHasAuthority(
                 user,
                 companyId = id,
                 authority = AuthorityTypes.ADD_RECORD
@@ -51,7 +53,7 @@ class CompanyServiceImpl(
     }
 
     override fun createCompany(companyDto: CompanyShortInfoDto, principal: Principal): CompanyShortInfoDto {
-        if (!userService.isActivatedUser(principal)) {
+        if (!authorizationService.isActivatedUser(principal)) {
             throw ForbiddenOperationException()
         }
         val company = Company()
@@ -66,9 +68,9 @@ class CompanyServiceImpl(
     override fun updateCompany(id: Long, companyDto: CompanyShortInfoDto, principal: Principal) {
         val user = userService.getUserByUsername(principal.name)
         val hasAuthority =
-            companyRoleService.userHasAuthority(user, companyId = id, authority = AuthorityTypes.EDIT_COMPANY)
+            authorizationService.userHasAuthority(user, companyId = id, authority = AuthorityTypes.EDIT_COMPANY)
         // TODO Возможно стоит вынести в отдельный сервис проверка на наличие прав или админский доступ
-        if (!hasAuthority || !userService.isAdmin(principal)) {
+        if (!hasAuthority || !authorizationService.isAdmin(principal)) {
             throw ForbiddenOperationException()
         }
         val company = companyRepository.findById(id).orElseThrow { NotFoundException("Компания не найдена") }
@@ -78,7 +80,7 @@ class CompanyServiceImpl(
     }
 
     override fun deleteCompany(id: Long, principal: Principal) {
-        if (!userService.isAdmin(principal)) {
+        if (!authorizationService.isAdmin(principal)) {
             throw ForbiddenOperationException()
         }
         val company = companyRepository.findById(id).orElseThrow { NotFoundException("Компания не найдена") }

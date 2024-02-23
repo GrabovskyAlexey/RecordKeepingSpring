@@ -12,11 +12,11 @@ class RoleServiceImpl(
     private val repository: RoleRepository,
     private val authorityService: AuthorityService
 ) : RoleService {
-    override fun findByName(name: String) = repository.findByName(name)
-    override fun save(role: Role) = repository.save(role)
+    override fun findByName(name: ApplicationRoleTypes) = repository.findByName(name)
+    override fun save(role: Role): Role = repository.save(role)
 
     override fun getDefaultRole(): Role {
-        return findByName("ROLE_UNACTIVATED_USER").orElseGet { createDefaultRole() }
+        return findByName(ApplicationRoleTypes.ROLE_UNACTIVATED_USER).orElseGet { createDefaultRole() }
     }
 
     private fun createDefaultRole(): Role {

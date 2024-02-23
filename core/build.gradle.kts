@@ -4,6 +4,7 @@ plugins {
 	id("org.springframework.boot") version "3.2.1"
 	id("io.spring.dependency-management") version "1.1.4"
 	kotlin("jvm") version "1.9.22"
+	kotlin("kapt")
 	kotlin("plugin.spring") version "1.9.22"
 	kotlin("plugin.jpa") version "1.9.22"
 	kotlin("plugin.allopen") version "1.9.22"
@@ -15,6 +16,14 @@ version = "0.0.1-SNAPSHOT"
 
 java {
 	sourceCompatibility = JavaVersion.VERSION_21
+}
+
+kapt {
+	keepJavacAnnotationProcessors = true
+	arguments {
+		arg("mapstruct.defaultComponentModel", "spring")
+		arg("mapstruct.unmappedTargetPolicy", "IGNORE")
+	}
 }
 
 configurations {
@@ -51,6 +60,7 @@ dependencies {
 	implementation("org.liquibase:liquibase-core")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.springframework.kafka:spring-kafka")
+	kapt("org.mapstruct:mapstruct-processor:1.5.5.Final")
 	implementation("org.mapstruct:mapstruct:1.5.5.Final")
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0")
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-api:2.3.0")
@@ -67,6 +77,7 @@ dependencies {
 	implementation("io.jsonwebtoken:jjwt-api:0.12.3")
 	implementation("io.jsonwebtoken:jjwt-impl:0.12.3")
 	implementation("io.jsonwebtoken:jjwt-jackson:0.12.3")
+//	annotationProcessor("org.mapstruct:mapstruct-processor:1.5.5.Final")
 }
 
 tasks.withType<KotlinCompile> {
