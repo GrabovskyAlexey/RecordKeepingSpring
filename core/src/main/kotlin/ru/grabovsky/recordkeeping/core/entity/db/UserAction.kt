@@ -1,7 +1,6 @@
 package ru.grabovsky.recordkeeping.core.entity.db
 
 import jakarta.persistence.*
-import org.hibernate.Hibernate
 import org.hibernate.annotations.CreationTimestamp
 import java.time.Instant
 

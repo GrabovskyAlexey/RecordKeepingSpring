@@ -1,10 +1,7 @@
 package ru.grabovsky.recordkeeping.core.controllers
 
-import org.springframework.security.access.annotation.Secured
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import ru.grabovsky.recordkeeping.api.dto.company.CompanyDto
-import ru.grabovsky.recordkeeping.api.dto.company.CompanyInfoResponseDto
 import ru.grabovsky.recordkeeping.api.dto.company.CompanyShortInfoDto
 import ru.grabovsky.recordkeeping.core.annotations.secutiry.AllowActivatedUser
 import ru.grabovsky.recordkeeping.core.controllers.interfaces.CompanyController

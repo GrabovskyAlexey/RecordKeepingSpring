@@ -16,9 +16,9 @@ import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer
 import ru.grabovsky.recordkeeping.api.notification.HTMLEmailMessage
 import ru.grabovsky.recordkeeping.api.notification.SimpleTextEmailMessage
 import ru.grabovsky.recordkeeping.notification.services.interfaces.NotificationService
+import ru.grabovsky.recordkeeping.notification.utils.getLogger
 import java.io.IOException
 import java.nio.charset.StandardCharsets
-import ru.grabovsky.recordkeeping.notification.utils.getLogger
 
 @Service
 @KafkaListener(topics = ["email"], groupId = "notify")

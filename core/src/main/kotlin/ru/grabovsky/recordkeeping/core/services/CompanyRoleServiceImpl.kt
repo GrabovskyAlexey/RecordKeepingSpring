@@ -1,7 +1,6 @@
 package ru.grabovsky.recordkeeping.core.services
 
 import org.springframework.stereotype.Service
-import ru.grabovsky.recordkeeping.api.types.AuthorityTypes
 import ru.grabovsky.recordkeeping.api.types.CompanyRoleTypes
 import ru.grabovsky.recordkeeping.core.entity.db.*
 import ru.grabovsky.recordkeeping.core.exceptions.ForbiddenOperationException
@@ -15,21 +14,21 @@ class CompanyRoleServiceImpl(
     private val companyUserRoleRepository: CompanyUserRoleRepository,
     private val companyRoleRepository: CompanyRoleRepository
 ) : CompanyRoleService {
-    override fun userHasAuthority(
-        user: User?,
-        userId: Long?,
-        company: Company?,
-        companyId: Long?,
-        authority: AuthorityTypes
-    ): Boolean {
-        val role = getUserCompanyAuthority(
-            user?.id ?: userId ?: 0,
-            company?.id ?: companyId ?: 0
-        )
-        return role.companyRole.authorities.any { it.type == authority }
-    }
+//    override fun userHasAuthority(
+//        user: User?,
+//        userId: Long?,
+//        company: Company?,
+//        companyId: Long?,
+//        authority: AuthorityTypes
+//    ): Boolean {
+//        val role = getUserCompanyAuthority(
+//            user?.id ?: userId ?: 0,
+//            company?.id ?: companyId ?: 0
+//        )
+//        return role.companyRole.authorities.any { it.type == authority }
+//    }
 
-    private fun getUserCompanyAuthority(userId: Long, companyId: Long): CompanyUserRole {
+    override fun getUserCompanyAuthority(userId: Long, companyId: Long): CompanyUserRole {
         return companyUserRoleRepository.findByUserIdAndCompanyId(userId, companyId)
             .orElseThrow { ForbiddenOperationException("У пользователя нет соответствующих прав в организации") };
     }

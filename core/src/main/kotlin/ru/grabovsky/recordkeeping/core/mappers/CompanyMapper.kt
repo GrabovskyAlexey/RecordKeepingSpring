@@ -12,10 +12,16 @@ import ru.grabovsky.recordkeeping.core.entity.db.Company
  * @created 28.01.2024 22:50
  */
 
-@Mapper
+@Mapper(uses = [
+    RecordMapper::class,
+    EmployeeMapper::class,
+    ContractorsMapper::class,
+    ProjectMapper::class
+])
 interface CompanyMapper {
-    fun fromEntityToDto(company: Company) : CompanyDto
-    fun fromEntityToShortDto(company: Company) : CompanyShortInfoDto
-    fun fromDtoToEntity(dto: CompanyDto): Company
+    fun fromEntityToShortDto(company: Company): CompanyShortInfoDto
     fun fromShortDtoToEntity(dto: CompanyShortInfoDto): Company
+    fun fromDtoToEntity(dto: CompanyDto): Company
+    fun fromEntityToDto(company: Company) : CompanyDto
+
 }

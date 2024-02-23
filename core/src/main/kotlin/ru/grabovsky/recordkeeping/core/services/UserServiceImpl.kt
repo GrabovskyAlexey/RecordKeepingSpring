@@ -3,7 +3,6 @@ package ru.grabovsky.recordkeeping.core.services
 import org.springframework.context.annotation.Lazy
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
-import org.springframework.security.core.Authentication
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
@@ -20,16 +19,12 @@ import ru.grabovsky.recordkeeping.api.utils.ConfirmToken.TokenType
 import ru.grabovsky.recordkeeping.core.entity.db.Role
 import ru.grabovsky.recordkeeping.core.entity.db.User
 import ru.grabovsky.recordkeeping.core.entity.db.UserInfo
-import ru.grabovsky.recordkeeping.core.entity.redis.RefreshToken
 import ru.grabovsky.recordkeeping.core.exceptions.*
-import ru.grabovsky.recordkeeping.core.repositories.db.UserInfoRepository
 import ru.grabovsky.recordkeeping.core.repositories.db.UserRepository
-import ru.grabovsky.recordkeeping.core.repositories.redis.RefreshTokenRepository
 import ru.grabovsky.recordkeeping.core.services.interfaces.NotificationService
 import ru.grabovsky.recordkeeping.core.services.interfaces.RoleService
+import ru.grabovsky.recordkeeping.core.services.interfaces.TokenService
 import ru.grabovsky.recordkeeping.core.services.interfaces.UserService
-import ru.grabovsky.recordkeeping.core.utils.JwtTokenUtil
-import java.security.Principal
 import java.time.LocalDate
 import java.util.*
 import javax.management.relation.RoleNotFoundException
@@ -38,13 +33,10 @@ import javax.management.relation.RoleNotFoundException
 class UserServiceImpl(
     @Lazy private val authenticationManager: AuthenticationManager,
     private val bCryptPasswordEncoder: BCryptPasswordEncoder,
-    private val jwtTokenUtil: JwtTokenUtil,
+    private val tokenService: TokenService,
     private val userRepository: UserRepository,
-    private val userInfoRepository: UserInfoRepository,
-    private val refreshRepository: RefreshTokenRepository,
     private val roleService: RoleService,
     private val notificationService: NotificationService,
-//    private val passwordResetTokenRepository: PasswordResetTokenRepository? = null,
 ) : UserService {
     override fun authenticate(request: AuthRequest): AuthResponse {
         authenticationManager.authenticate(
@@ -67,10 +59,8 @@ class UserServiceImpl(
     private fun createAuthResponseByUsername(username: String): AuthResponse {
         val userDetails = loadUserByUsername(username)
 
-        val accessToken = jwtTokenUtil.generateAccessToken(userDetails)
-        val refreshToken = jwtTokenUtil.generateRefreshToken(userDetails)
-        val refresh = RefreshToken(userDetails.username, refreshToken)
-        refreshRepository.save(refresh)
+        val accessToken = tokenService.getAccessToken(userDetails)
+        val refreshToken = tokenService.getRefreshToken(userDetails)
         val authResponse = AuthResponse(accessToken, refreshToken)
         return authResponse
     }
@@ -104,7 +94,7 @@ class UserServiceImpl(
     }
 
     override fun confirmEmail(token: TokenDto): AuthResponse {
-        val confirmToken = jwtTokenUtil.parseConfirmToken(token.token)
+        val confirmToken = tokenService.getConfirmToken(token.token)
         if (confirmToken.type != TokenType.EMAIL_CONFIRM) {
             throw IncorrectConfirmTokenException("Не верный тип токена для подтверждения адреса электронной почты")
         }
@@ -118,7 +108,7 @@ class UserServiceImpl(
             user.isActivated ->
                 throw UserConfirmEmailException("Электронная почта для пользователя ${confirmToken.username} была подтверждена ранее")
         }
-        val role = roleService.findByName("ROLE_REGISTERED_USER")
+        val role = roleService.findByName(ApplicationRoleTypes.ROLE_UNACTIVATED_USER)
             .orElseThrow { RoleNotFoundException("Не найдена роль зарегистрированного пользователя") }
         user.roles.clear()
         user.roles.add(role)
@@ -127,62 +117,44 @@ class UserServiceImpl(
         return createAuthResponseByUsername(user.username)
     }
 
-        override fun loadUserByUsername(username: String): UserDetails {
-            val user = userRepository.findByUsername(username).orElseThrow {
-                throw UsernameNotFoundException("User '$username' not found")
-            }
-            return org.springframework.security.core.userdetails.User(
-                user.username,
-                user.password,
-                getUserRoles(user.roles)
+    override fun loadUserByUsername(username: String): UserDetails {
+        val user = userRepository.findByUsername(username).orElseThrow {
+            throw UsernameNotFoundException("User '$username' not found")
+        }
+        return org.springframework.security.core.userdetails.User(
+            user.username,
+            user.password,
+            getUserRoles(user.roles)
+        )
+    }
+
+    private fun getUserRoles(roles: Collection<Role>): Collection<GrantedAuthority> {
+        if (roles.isEmpty()) {
+            return setOf()
+        }
+        return getRolesAndPrivileges(roles)
+            .map { SimpleGrantedAuthority(it) }
+            .toSet()
+    }
+
+    //TODO Подумать над более оптимальным алгоритмом
+    private fun getRolesAndPrivileges(roles: Collection<Role>): Collection<String> {
+        val result: MutableSet<String> = HashSet()
+        for (role in roles) {
+            result.add(role.name.toString())
+            result.addAll(
+                role.authorities
+                    .map { it.type.toString() }
+                    .toSet()
             )
         }
-
-        private fun getUserRoles(roles: Collection<Role>): Collection<GrantedAuthority> {
-            if (roles.isEmpty()) {
-                return setOf()
-            }
-            return getRolesAndPrivileges(roles)
-                .map { SimpleGrantedAuthority(it) }
-                .toSet()
-        }
-
-        //TODO Подумать над более оптимальным алгоритмом
-        private fun getRolesAndPrivileges(roles: Collection<Role>): Collection<String> {
-            val result: MutableSet<String> = HashSet()
-            for (role in roles) {
-                result.add(role.name.toString())
-                result.addAll(
-                    role.authorities
-                        .map { it.type.toString() }
-                        .toSet()
-                )
-            }
-            return result
-        }
-
-    override fun getUserById(id: Long): User {
-        return userRepository.findById(id).get();
+        return result
     }
+
+    override fun getUserById(id: Long) = userRepository.findById(id).get()
 
     override fun getUserByUsername(username: String): User {
-        return userRepository.findByUsername(username).orElseThrow { UserNotFoundException("Пользователь $username не найден") }
-    }
-
-    override fun isAdmin(principal: Principal): Boolean {
-        if(principal is Authentication) {
-            return principal.authorities.any { it.authority.equals(ApplicationRoleTypes.ROLE_APP_ADMIN.toString()) }
-        }
-        return false;
-    }
-
-    override fun isActivatedUser(principal: Principal): Boolean {
-        if(principal is Authentication) {
-            return principal.authorities.any {
-                it.authority.equals(ApplicationRoleTypes.ROLE_APP_ADMIN.toString())
-                        || it.authority.equals(ApplicationRoleTypes.ROLE_ACTIVATED_USER.toString())
-            }
-        }
-        return false;
+        return userRepository.findByUsername(username)
+            .orElseThrow { UserNotFoundException("Пользователь $username не найден") }
     }
 }

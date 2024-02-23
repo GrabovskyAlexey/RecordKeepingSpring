@@ -15,7 +15,7 @@ class AuthorityServiceImpl(
     }
 
     override fun findByType(type: AuthorityTypes) = repository.findByType(type)
-    override fun save(authority: Authority) = repository.save(authority)
+    override fun save(authority: Authority) : Authority = repository.save(authority)
 
     private fun createDefaultAuthority(): Authority {
         val authority = Authority(

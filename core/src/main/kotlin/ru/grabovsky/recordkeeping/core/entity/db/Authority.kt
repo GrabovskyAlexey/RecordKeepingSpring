@@ -1,7 +1,6 @@
 package ru.grabovsky.recordkeeping.core.entity.db
 
 import jakarta.persistence.*
-import org.hibernate.Hibernate
 import ru.grabovsky.recordkeeping.api.types.AuthorityTypes
 
 /**

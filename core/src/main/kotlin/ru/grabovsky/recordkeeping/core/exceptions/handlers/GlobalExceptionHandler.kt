@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 import ru.grabovsky.recordkeeping.api.dto.utils.MessageDto
 import ru.grabovsky.recordkeeping.api.dto.validations.ValidationError
 import ru.grabovsky.recordkeeping.api.dto.validations.ValidationErrorResponseDto
-import ru.grabovsky.recordkeeping.core.exceptions.*
+import ru.grabovsky.recordkeeping.core.exceptions.BadRequestException
+import ru.grabovsky.recordkeeping.core.exceptions.ForbiddenOperationException
+import ru.grabovsky.recordkeeping.core.exceptions.NotFoundException
 import ru.grabovsky.recordkeeping.core.utils.getLogger
 import java.util.stream.Collectors
 
