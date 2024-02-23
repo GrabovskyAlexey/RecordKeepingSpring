@@ -19,6 +19,4 @@ interface UserService : UserDetailsService {
     fun confirmEmail(token: TokenDto): AuthResponse
     fun getUserById(id: Long): User
     fun getUserByUsername(username: String): User
-//    fun isAdmin(principal: Principal): Boolean
-//    fun isActivatedUser(principal: Principal): Boolean
 }

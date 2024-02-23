@@ -14,19 +14,6 @@ class CompanyRoleServiceImpl(
     private val companyUserRoleRepository: CompanyUserRoleRepository,
     private val companyRoleRepository: CompanyRoleRepository
 ) : CompanyRoleService {
-//    override fun userHasAuthority(
-//        user: User?,
-//        userId: Long?,
-//        company: Company?,
-//        companyId: Long?,
-//        authority: AuthorityTypes
-//    ): Boolean {
-//        val role = getUserCompanyAuthority(
-//            user?.id ?: userId ?: 0,
-//            company?.id ?: companyId ?: 0
-//        )
-//        return role.companyRole.authorities.any { it.type == authority }
-//    }
 
     override fun getUserCompanyAuthority(userId: Long, companyId: Long): CompanyUserRole {
         return companyUserRoleRepository.findByUserIdAndCompanyId(userId, companyId)
