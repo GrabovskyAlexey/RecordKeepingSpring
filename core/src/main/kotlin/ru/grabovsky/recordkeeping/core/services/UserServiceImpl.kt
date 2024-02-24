@@ -1,6 +1,9 @@
 package ru.grabovsky.recordkeeping.core.services
 
+import jakarta.validation.Valid
+import org.springframework.context.MessageSource
 import org.springframework.context.annotation.Lazy
+import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.GrantedAuthority
@@ -21,10 +24,7 @@ import ru.grabovsky.recordkeeping.core.entity.db.User
 import ru.grabovsky.recordkeeping.core.entity.db.UserInfo
 import ru.grabovsky.recordkeeping.core.exceptions.*
 import ru.grabovsky.recordkeeping.core.repositories.db.UserRepository
-import ru.grabovsky.recordkeeping.core.services.interfaces.NotificationService
-import ru.grabovsky.recordkeeping.core.services.interfaces.RoleService
-import ru.grabovsky.recordkeeping.core.services.interfaces.TokenService
-import ru.grabovsky.recordkeeping.core.services.interfaces.UserService
+import ru.grabovsky.recordkeeping.core.services.interfaces.*
 import java.time.LocalDate
 import java.util.*
 import javax.management.relation.RoleNotFoundException
@@ -37,6 +37,7 @@ class UserServiceImpl(
     private val userRepository: UserRepository,
     private val roleService: RoleService,
     private val notificationService: NotificationService,
+    private val localizationService: LocalizationService
 ) : UserService {
     override fun authenticate(request: AuthRequest): AuthResponse {
         authenticationManager.authenticate(
@@ -48,7 +49,7 @@ class UserServiceImpl(
         return createAuthResponseByUsername(request.username)
     }
 
-    override fun register(request: RegisterRequest): AuthResponse {
+    override fun register(@Valid request: RegisterRequest): AuthResponse {
         val user = createNewUser(request)
         val token = ConfirmToken(user.email, user.username, user.activationCode, TokenType.EMAIL_CONFIRM)
         notificationService.sendTokenInHtmlEmail(token)
@@ -68,10 +69,14 @@ class UserServiceImpl(
     private fun createNewUser(request: RegisterRequest): User {
         when {
             userRepository.existsByUsernameIgnoreCase(request.username) ->
-                throw UserAlreadyExistsException("Пользователь с логином ${request.username} уже существует")
+                throw UserAlreadyExistsException(
+                    localizationService.getErrorMessage("user.login.alreadyExists", arrayOf(request.username))
+                )
 
             userRepository.existsByEmailIgnoreCase(request.email) ->
-                throw EmailAlreadyExistsException("Пользователь с электронной почтой ${request.email} уже существует")
+                throw EmailAlreadyExistsException(
+                    localizationService.getErrorMessage("user.email.alreadyExists", arrayOf(request.email))
+                )
         }
         val uuid = UUID.randomUUID().toString()
         val roles: Set<Role> = setOf(roleService.getDefaultRole())
@@ -96,20 +101,20 @@ class UserServiceImpl(
     override fun confirmEmail(token: TokenDto): AuthResponse {
         val confirmToken = tokenService.getConfirmToken(token.token)
         if (confirmToken.type != TokenType.EMAIL_CONFIRM) {
-            throw IncorrectConfirmTokenException("Не верный тип токена для подтверждения адреса электронной почты")
+            throw IncorrectConfirmTokenException(localizationService.getErrorMessage("token.type.incorrect"))
         }
         val user = userRepository.findByUsername(confirmToken.username!!)
-            .orElseThrow { UserNotFoundException("Пользователь ${confirmToken.username!!} не найден") }
+            .orElseThrow { UserNotFoundException(localizationService.getErrorMessage("user.notFound", arrayOf(confirmToken.username!!))) }
 
         when {
             user.email != confirmToken.email || confirmToken.code != user.activationCode ->
-                throw UserConfirmEmailException("Не удалось подтвердить адрес электронной почты для пользователя ${confirmToken.username}")
+                throw UserConfirmEmailException(localizationService.getErrorMessage("token.email.notConfirm", arrayOf(confirmToken.username!!)))
 
             user.isActivated ->
-                throw UserConfirmEmailException("Электронная почта для пользователя ${confirmToken.username} была подтверждена ранее")
+                throw UserConfirmEmailException(localizationService.getErrorMessage("token.email.alreadyConfirm", arrayOf(confirmToken.username!!)))
         }
         val role = roleService.findByName(ApplicationRoleTypes.ROLE_UNACTIVATED_USER)
-            .orElseThrow { RoleNotFoundException("Не найдена роль зарегистрированного пользователя") }
+            .orElseThrow { RoleNotFoundException(localizationService.getErrorMessage("role.registerUser.notFound")) }
         user.roles.clear()
         user.roles.add(role)
         user.isActivated = true
@@ -119,7 +124,7 @@ class UserServiceImpl(
 
     override fun loadUserByUsername(username: String): UserDetails {
         val user = userRepository.findByUsername(username).orElseThrow {
-            throw UsernameNotFoundException("User '$username' not found")
+            throw UsernameNotFoundException(localizationService.getErrorMessage("user.notFound", arrayOf(username)))
         }
         return org.springframework.security.core.userdetails.User(
             user.username,
@@ -155,6 +160,6 @@ class UserServiceImpl(
 
     override fun getUserByUsername(username: String): User {
         return userRepository.findByUsername(username)
-            .orElseThrow { UserNotFoundException("Пользователь $username не найден") }
+            .orElseThrow { UserNotFoundException(localizationService.getErrorMessage("user.notFound", arrayOf(username))) }
     }
 }

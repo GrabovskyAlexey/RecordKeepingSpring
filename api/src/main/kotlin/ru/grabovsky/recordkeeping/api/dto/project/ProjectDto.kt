@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import io.swagger.v3.oas.annotations.media.Schema
 import ru.grabovsky.recordkeeping.api.dto.company.CompanyDto
 import ru.grabovsky.recordkeeping.api.dto.record.RecordDto
-import javax.validation.constraints.NotEmpty
-import javax.validation.constraints.Size
+import jakarta.validation.constraints.NotEmpty
+import jakarta.validation.constraints.Size
 
 /**
  *

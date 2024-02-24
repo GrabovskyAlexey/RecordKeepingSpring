@@ -10,8 +10,8 @@ import ru.grabovsky.recordkeeping.api.dto.project.ProjectDto
 import ru.grabovsky.recordkeeping.api.dto.user.UserDto
 import ru.grabovsky.recordkeeping.api.types.Direction
 import java.time.LocalDate
-import javax.validation.constraints.NotEmpty
-import javax.validation.constraints.Size
+import jakarta.validation.constraints.NotEmpty
+import jakarta.validation.constraints.Size
 
 /**
  *

@@ -10,10 +10,7 @@ import ru.grabovsky.recordkeeping.core.exceptions.ForbiddenOperationException
 import ru.grabovsky.recordkeeping.core.exceptions.NotFoundException
 import ru.grabovsky.recordkeeping.core.mappers.CompanyMapper
 import ru.grabovsky.recordkeeping.core.repositories.db.CompanyRepository
-import ru.grabovsky.recordkeeping.core.services.interfaces.AuthorizationService
-import ru.grabovsky.recordkeeping.core.services.interfaces.CompanyRoleService
-import ru.grabovsky.recordkeeping.core.services.interfaces.CompanyService
-import ru.grabovsky.recordkeeping.core.services.interfaces.UserService
+import ru.grabovsky.recordkeeping.core.services.interfaces.*
 import java.security.Principal
 
 @Service
@@ -22,7 +19,8 @@ class CompanyServiceImpl(
     private val companyRepository: CompanyRepository,
     private val authorizationService: AuthorizationService,
     private val userService: UserService,
-    private val companyRoleService: CompanyRoleService
+    private val companyRoleService: CompanyRoleService,
+    private val localizationService: LocalizationService
 ) : CompanyService {
     override fun getAllCompany(principal: Principal): CompanyInfoResponseDto {
         if (authorizationService.isAdmin(principal)) {
@@ -46,7 +44,7 @@ class CompanyServiceImpl(
                 authority = AuthorityTypes.ADD_RECORD
             )
         ) {
-            val company = companyRepository.findById(id).orElseThrow { NotFoundException("Компания не найдена") }
+            val company = findById(id)
             return companyMapper.fromEntityToDto(company)
         }
         throw ForbiddenOperationException()
@@ -73,7 +71,7 @@ class CompanyServiceImpl(
         if (!hasAuthority || !authorizationService.isAdmin(principal)) {
             throw ForbiddenOperationException()
         }
-        val company = companyRepository.findById(id).orElseThrow { NotFoundException("Компания не найдена") }
+        val company = findById(id)
         company.name = companyDto.name
         // TODO Проверить нужно ли сетить isEnabled
         companyRepository.save(company)
@@ -83,8 +81,12 @@ class CompanyServiceImpl(
         if (!authorizationService.isAdmin(principal)) {
             throw ForbiddenOperationException()
         }
-        val company = companyRepository.findById(id).orElseThrow { NotFoundException("Компания не найдена") }
+        val company = findById(id)
         company.isEnabled = false;
         companyRepository.save(company);
+    }
+
+    private fun findById(id: Long): Company = companyRepository.findById(id).orElseThrow {
+        NotFoundException(localizationService.getErrorMessage("company.notFound"))
     }
 }

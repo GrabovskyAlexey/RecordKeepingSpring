@@ -3,7 +3,7 @@ package ru.grabovsky.recordkeeping.api.dto.user
 import com.fasterxml.jackson.annotation.JsonProperty
 import io.swagger.v3.oas.annotations.media.Schema
 import java.time.LocalDate
-import javax.validation.constraints.Size
+import jakarta.validation.constraints.Size
 
 /**
  *

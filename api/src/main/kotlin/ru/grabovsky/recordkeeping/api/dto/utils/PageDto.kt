@@ -3,7 +3,7 @@ package ru.grabovsky.recordkeeping.api.dto.utils
 import com.fasterxml.jackson.annotation.JsonProperty
 import io.swagger.v3.oas.annotations.media.Schema
 import ru.grabovsky.recordkeeping.api.dto.interfaces.PageableDto
-import javax.validation.constraints.Positive
+import jakarta.validation.constraints.Positive
 
 /**
  * DTO для пагинации

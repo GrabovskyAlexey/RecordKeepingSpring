@@ -10,9 +10,9 @@ import io.swagger.v3.oas.annotations.media.Schema
  * @date 21.01.2024
  */
 
-@Schema(description = "Список организаций", name = "CompanyList")
+@Schema(description = "swagger.company.list", name = "CompanyList")
 data class CompanyResponseDto(
-    @Schema(description = "Список организаций")
+    @Schema(description = "swagger.company.list")
     @JsonProperty("companies")
     val users: List<CompanyDto> = listOf()
 )

@@ -2,8 +2,8 @@ package ru.grabovsky.recordkeeping.api.dto.auth
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import io.swagger.v3.oas.annotations.media.Schema
-import javax.validation.constraints.NotEmpty
-import javax.validation.constraints.Size
+import jakarta.validation.constraints.NotEmpty
+import jakarta.validation.constraints.Size
 
 /**
  *
@@ -12,15 +12,15 @@ import javax.validation.constraints.Size
  * @date 03.01.2024
  */
 
-@Schema(description = "Запрос аутентификации", name = "AuthRequest")
+@Schema(description = "swagger.auth.request", name = "AuthRequest")
 data class AuthRequest(
-    @NotEmpty(message = "Имя пользователя не может быть пустым")
-    @Schema(description = "Имя пользователя", example = "user")
+    @field:NotEmpty(message = "{validation.username.nonEmpty}")
+    @Schema(description = "swagger.user.username", example = "user")
     @JsonProperty("username")
     val username: String,
 
-    @NotEmpty(message = "Пароль не может быть пустым")
-    @Size(min = 8, message = "Пароль должен быть не меньше 8 символов")
-    @Schema(description = "Пароль", example = "pa$\$w0rd")
+    @field:NotEmpty(message = "{validation.password.nonEmpty}")
+    @field:Size(min = 8, message = "{validation.password.length}")
+    @Schema(description = "swagger.user.password", example = "pa$\$w0rd")
     @JsonProperty("password")
     val password: String)

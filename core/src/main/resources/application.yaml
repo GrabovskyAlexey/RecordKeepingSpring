@@ -12,6 +12,8 @@ spring:
       hibernate:
         format_sql: true
 springdoc:
+  api-docs:
+    resolve-schema-properties: true
   show-actuator: false
   swagger-ui:
     enabled: true
