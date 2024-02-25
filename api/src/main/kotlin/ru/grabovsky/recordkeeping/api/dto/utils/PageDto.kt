@@ -11,33 +11,33 @@ import jakarta.validation.constraints.Positive
  * @author GrabovskyAlexey
  * @created 14.01.2024 12:55
  */
-@Schema(description = "Страница для пагинации", name = "Page")
+@Schema(description = "swagger.page.info", name = "Page")
 data class PageDto<T : PageableDto>(
-    @Schema(description = "Элементы страницы")
+    @Schema(description = "swagger.page.items")
     @JsonProperty("pageItems")
     val pageItems: MutableList<T> = mutableListOf(),
 
-    @Schema(description = "Номер страницы")
+    @Schema(description = "swagger.page.index")
     @JsonProperty("pageIndex")
     val pageIndex: @Positive Int,
 
-    @Schema(description = "Первая страница?")
+    @Schema(description = "swagger.page.isFirst")
     @JsonProperty("isFirst")
     val isFirst: Boolean,
 
-    @Schema(description = "Последняя страница?")
+    @Schema(description = "swagger.page.isLast")
     @JsonProperty("isLast")
     val isLast: Boolean,
 
-    @Schema(description = "Размер страницы")
+    @Schema(description = "swagger.page.size")
     @JsonProperty("pageSize")
     val pageSize: Int,
 
-    @Schema(description = "Всего страниц")
+    @Schema(description = "swagger.page.total")
     @JsonProperty("totalPages")
     val totalPages: Int,
 
-    @Schema(description = "Всего элементов")
-    @JsonProperty("totalElements")
-    val totalElements: Long
+    @Schema(description = "swagger.page.items.total")
+    @JsonProperty("totalItems")
+    val totalItems: Long
 )
