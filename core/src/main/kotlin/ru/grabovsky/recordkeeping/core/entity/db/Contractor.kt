@@ -30,14 +30,14 @@ class Contractor(
     var updatedAt: Instant? = null
 
     @ManyToOne
-    @JoinColumn(name = "company_id", nullable = false)
-    lateinit var company: Company
+    @JoinColumn(name = "organization_id", nullable = false)
+    lateinit var organization: Organization
 
     @OneToMany(mappedBy = "contractor")
     val records: List<Record> = listOf()
 
     override fun toString(): String {
-        return "Contractor(id=$id, name='$name', company=$company)"
+        return "Contractor(id=$id, name='$name', organization=$organization)"
     }
 
 }

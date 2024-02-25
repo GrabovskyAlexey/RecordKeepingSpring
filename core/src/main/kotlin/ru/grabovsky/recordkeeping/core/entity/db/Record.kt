@@ -36,8 +36,8 @@ class Record(
     @Column(name = "reg_date", nullable = false)
     lateinit var regDate: LocalDate
 
-    @Column(name = "title", nullable = false)
-    lateinit var title: String
+    @Column(name = "subject", nullable = false)
+    lateinit var subject: String
 
     @OneToMany(mappedBy = "replyTo", cascade = [CascadeType.ALL], orphanRemoval = true)
     @Column(name = "reply_id")
@@ -74,8 +74,8 @@ class Record(
     var contractor: Contractor? = null
 
     @ManyToOne
-    @JoinColumn(name = "company_id", nullable = false)
-    lateinit var company: Company
+    @JoinColumn(name = "organization_id", nullable = false)
+    lateinit var organization: Organization
 
     @ManyToOne
     @JoinColumn(name = "author_id", nullable = false)
@@ -85,6 +85,6 @@ class Record(
     val files: List<File> = listOf()
 
     override fun toString(): String {
-        return "Record(id=$id, direction=$direction, color='$color', mailNumber='$mailNumber', regDate=$regDate, title='$title', reply=$reply, replyTo=$replyTo, mailDate=$mailDate, description=$description, project=$project, employee=$employee, contractor=$contractor, company=$company, author=$author)"
+        return "Record(id=$id, direction=$direction, color='$color', mailNumber='$mailNumber', regDate=$regDate, subject='$subject', reply=$reply, replyTo=$replyTo, mailDate=$mailDate, description=$description, project=$project, employee=$employee, contractor=$contractor, organization=$organization, author=$author)"
     }
 }

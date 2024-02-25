@@ -56,11 +56,11 @@ class User(
 
     @ManyToMany
     @JoinTable(
-        name = "users_companies",
+        name = "users_organizations",
         joinColumns = [JoinColumn(name = "user_id")],
-        inverseJoinColumns = [JoinColumn(name = "company_id")]
+        inverseJoinColumns = [JoinColumn(name = "organization_id")]
     )
-    val companies: MutableSet<Company> = mutableSetOf()
+    val organizations: MutableSet<Organization> = mutableSetOf()
 
     @OneToMany(mappedBy = "author")
     val records: Set<Record> = setOf()

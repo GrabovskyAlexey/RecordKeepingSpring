@@ -11,9 +11,9 @@ import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
-import ru.grabovsky.recordkeeping.api.dto.company.CompanyDto
-import ru.grabovsky.recordkeeping.api.dto.company.CompanyInfoResponseDto
-import ru.grabovsky.recordkeeping.api.dto.company.CompanyShortInfoDto
+import ru.grabovsky.recordkeeping.api.dto.organization.OrganizationDto
+import ru.grabovsky.recordkeeping.api.dto.organization.OrganizationInfoResponseDto
+import ru.grabovsky.recordkeeping.api.dto.organization.OrganizationShortInfoDto
 import ru.grabovsky.recordkeeping.api.dto.utils.MessageDto
 import java.security.Principal
 
@@ -25,29 +25,29 @@ import java.security.Principal
  */
 
 @Validated
-@Tag(name = "company", description = "Контроллер для работы с организациями")
+@Tag(name = "organization", description = "Контроллер для работы с организациями")
 @SecurityRequirement(name = "JWTAuth")
-interface CompanyController {
+interface OrganizationController {
 
     /**
-     * GET ${application.api.url}/company : Get all company (Admin only)
+     * GET ${application.api.url}/organization : Get all organization (Admin only)
      *
-     * @return Response contains list of all companies (status code 200)
+     * @return Response contains list of all organizations (status code 200)
      * or Bad Request (status code 400)
      * or Unauthorized (status code 401)
      * or Forbidden (status code 403)
      */
     @Operation(
-        operationId = "getAllCompany",
-        summary = "Получить список всех компаний (Доступно только Администратору приложения)",
-        tags = ["company"],
+        operationId = "getAllOrganization",
+        summary = "Получить список всех организаций (Доступно только Администратору приложения)",
+        tags = ["organization"],
         responses = [
             ApiResponse(
                 responseCode = "200",
-                description = "Список всех компаний",
+                description = "Список всех организаций",
                 content = [Content(
                     mediaType = "application/json",
-                    schema = Schema(implementation = CompanyInfoResponseDto::class)
+                    schema = Schema(implementation = OrganizationInfoResponseDto::class)
                 )]
             ),
             ApiResponse(
@@ -74,25 +74,25 @@ interface CompanyController {
     @ResponseStatus(
         HttpStatus.OK
     )
-    fun getAllCompany(principal: Principal): CompanyInfoResponseDto
+    fun getAllOrganization(principal: Principal): OrganizationInfoResponseDto
 
 
     /**
-     * GET ${application.api.url}/company/{id} : Get company by id
+     * GET ${application.api.url}/organization/{id} : Get organization by id
      *
-     * @return Company (status code 200)
+     * @return organization (status code 200)
      * or Bad Request (status code 400)
      * or Unauthorized (status code 401)
      * or Forbidden (status code 403)
      */
     @Operation(
-        operationId = "getCompanyById",
+        operationId = "getOrganizationById",
         summary = "Получить организацию по id",
-        tags = ["company"],
+        tags = ["organization"],
         responses = [ApiResponse(
             responseCode = "200",
             description = "Организация",
-            content = [Content(mediaType = "application/json", schema = Schema(implementation = CompanyDto::class))]
+            content = [Content(mediaType = "application/json", schema = Schema(implementation = OrganizationDto::class))]
         ), ApiResponse(
             responseCode = "400",
             description = "Bad Request",
@@ -104,31 +104,31 @@ interface CompanyController {
         )]
     )
     @GetMapping(value = ["/{id}"], produces = ["application/json"])
-    fun getCompanyById(
-        @Parameter(name = "id", description = "Company id", required = true)
+    fun getOrganizationById(
+        @Parameter(name = "id", description = "organization id", required = true)
         @PathVariable("id") id: Long,
         principal: Principal
-    ): CompanyDto
+    ): OrganizationDto
 
     /**
-     * POST ${application.api.url}/company/ : Add company
+     * POST ${application.api.url}/organization/ : Add organization
      *
-     * @param company Company info (required)
-     * @return Successfully create company (status code 201)
+     * @param organization organization info (required)
+     * @return Successfully create organization (status code 201)
      * or Bad Request (status code 400)
      * or Unauthorized (status code 401)
      * or Forbidden (status code 403)
      */
     @Operation(
-        operationId = "createCompany",
+        operationId = "createOrganization",
         summary = "Создание организации",
-        tags = ["company"],
+        tags = ["organization"],
         responses = [ApiResponse(
             responseCode = "201",
             description = "Успешно созданная организация",
             content = [Content(
                 mediaType = "application/json",
-                schema = Schema(implementation = CompanyShortInfoDto::class)
+                schema = Schema(implementation = OrganizationShortInfoDto::class)
             )]
         ), ApiResponse(
             responseCode = "400",
@@ -146,29 +146,29 @@ interface CompanyController {
     @ResponseStatus(
         HttpStatus.CREATED
     )
-    fun createCompany(
+    fun createOrganization(
         @Parameter(
             name = "Организация",
             description = "Данные организации",
             required = true
-        ) @RequestBody company: @Valid CompanyShortInfoDto,
+        ) @RequestBody organization: @Valid OrganizationShortInfoDto,
         principal: Principal
-    ): CompanyShortInfoDto
+    ): OrganizationShortInfoDto
 
     /**
-     * PUT ${application.api.url}/company/{id} : Update company by id
+     * PUT ${application.api.url}/organization/{id} : Update organization by id
      *
-     * @param company Company info (required)
-     * @return Successfully update company (status code 204)
+     * @param organization organization info (required)
+     * @return Successfully update organization (status code 204)
      * or Bad Request (status code 400)
      * or Unauthorized (status code 401)
      * or Forbidden (status code 403)
      * or Not found task (status code 404)
      */
     @Operation(
-        operationId = "updateCompany",
+        operationId = "updateOrganization",
         summary = "Обновить организацию",
-        tags = ["company"],
+        tags = ["organization"],
         responses = [ApiResponse(responseCode = "204", description = "Организация успешно обновлена"),
             ApiResponse(
                 responseCode = "400",
@@ -190,30 +190,30 @@ interface CompanyController {
     @ResponseStatus(
         HttpStatus.NO_CONTENT
     )
-    fun updateCompany(
-        @Parameter(name = "id", description = "Company id", required = true) @PathVariable("id") id: Long,
+    fun updateOrganization(
+        @Parameter(name = "id", description = "organization id", required = true) @PathVariable("id") id: Long,
         @Parameter(
-            name = "Company",
-            description = "Company info",
+            name = "organization",
+            description = "organization info",
             required = true
-        ) @RequestBody company: @Valid CompanyShortInfoDto,
+        ) @RequestBody organization: @Valid OrganizationShortInfoDto,
         principal: Principal
     )
 
     /**
-     * DELETE ${application.api.url}/company/{id} : Delete company by id
+     * DELETE ${application.api.url}/organization/{id} : Delete organization by id
      *
-     * @param id company id (required)
-     * @return Successfully delete company (status code 204)
+     * @param id organization id (required)
+     * @return Successfully delete organization (status code 204)
      * or Bad Request (status code 400)
      * or Unauthorized (status code 401)
      * or Forbidden (status code 403)
      * or Not found task (status code 404)
      */
     @Operation(
-        operationId = "deleteCompany",
+        operationId = "deleteOrganization",
         summary = "Удаление организации",
-        tags = ["company"],
+        tags = ["organization"],
         responses = [
             ApiResponse(
                 responseCode = "204",
@@ -238,10 +238,10 @@ interface CompanyController {
     @ResponseStatus(
         HttpStatus.NO_CONTENT
     )
-    fun deleteCompany(
+    fun deleteOrganization(
         @Parameter(
             name = "id",
-            description = "company id",
+            description = "organization id",
             required = true)
         @PathVariable("id") id: Long,
         principal: Principal

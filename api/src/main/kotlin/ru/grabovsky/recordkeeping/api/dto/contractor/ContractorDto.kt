@@ -2,7 +2,7 @@ package ru.grabovsky.recordkeeping.api.dto.contractor
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import io.swagger.v3.oas.annotations.media.Schema
-import ru.grabovsky.recordkeeping.api.dto.company.CompanyDto
+import ru.grabovsky.recordkeeping.api.dto.organization.OrganizationDto
 import ru.grabovsky.recordkeeping.api.dto.record.RecordDto
 import jakarta.validation.constraints.NotEmpty
 import jakarta.validation.constraints.Size
@@ -23,10 +23,10 @@ data class ContractorDto(
     @Schema(description = "swagger.contractor.name", example = "ООО \"Ромашка\"")
     @JsonProperty("contractorName")
     val name: String,
-    @field:NotEmpty(message = "{validation.contractor.company.nonEmpty}")
-    @Schema(description = "swagger.contractor.company")
-    @JsonProperty("company")
-    val company: CompanyDto,
+    @field:NotEmpty(message = "{validation.contractor.organization.nonEmpty}")
+    @Schema(description = "swagger.contractor.organization")
+    @JsonProperty("organization")
+    val organization: OrganizationDto,
     @Schema(description = "swagger.record.list")
     @JsonProperty("records")
     val records: List<RecordDto> = listOf()

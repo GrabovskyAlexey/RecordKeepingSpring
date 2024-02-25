@@ -2,7 +2,7 @@ package ru.grabovsky.recordkeeping.api.dto.record
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import io.swagger.v3.oas.annotations.media.Schema
-import ru.grabovsky.recordkeeping.api.dto.company.CompanyDto
+import ru.grabovsky.recordkeeping.api.dto.organization.OrganizationDto
 import ru.grabovsky.recordkeeping.api.dto.contractor.ContractorDto
 import ru.grabovsky.recordkeeping.api.dto.employee.EmployeeDto
 import ru.grabovsky.recordkeeping.api.dto.file.FileDto
@@ -19,63 +19,63 @@ import jakarta.validation.constraints.Size
  * @author GrabovskyAlexey
  * @created 14.01.2024 13:28
  */
-@Schema(description = "Запись о входящей\\исходящей корреспонденции", name = "Record")
+@Schema(description = "swagger.record.info", name = "Record")
 data class RecordDto(
-    @Schema(description = "id записи", example = "1")
+    @Schema(description = "swagger.record.id", example = "1")
     @JsonProperty("id")
     var id: Long? = null,
-    @NotEmpty(message = "Направление не может быть пустым")
-    @Schema(description = "Направление: входящее, исходящее, специальное", example = "IN")
+    @field:NotEmpty(message = "{validation.record.direction.nonEmpty}")
+    @Schema(description = "swagger.record.direction", example = "IN")
     @JsonProperty("direction")
     var direction: Direction,
-    @Size(min = 7, max = 7, message = "HEX представление цвета должно быть 7 символов")
-    @Schema(description = "HEX представление цвета для выделения сообщения", example = "#FF0000")
+    @field:Size(min = 7, max = 7, message = "{validation.record.color.size}")
+    @Schema(description = "swagger.record.color", example = "#FF0000")
     @JsonProperty("color")
     var color: String = "#FFFFFF",
-    @NotEmpty(message = "Регистрационный номер сообщения не может быть пустым")
-    @Size(min = 2, max = 50, message = "Регистрационный номер сообщения должен быть от 2 до 50 символов")
-    @Schema(description = "Регистрационный номер сообщения", example = "1-ВН-47\\32")
+    @field:NotEmpty(message = "{validation.record.number.nonEmpty}")
+    @field:Size(min = 2, max = 50, message = "{validation.record.number.size}")
+    @Schema(description = "swagger.record.number", example = "1-ВН-47\\32")
     @JsonProperty("mailNumber")
     var mailNumber: String,
-    @NotEmpty(message = "Дата регистрации сообщения не может быть пустой")
-    @Schema(description = "Дата регистрации сообщения")
+    @field:NotEmpty(message = "{validation.record.regDate.nonEmpty}")
+    @Schema(description = "swagger.record.regDate")
     @JsonProperty("regDate")
     var regDate: LocalDate,
-    @Size(min = 2, max = 250, message = "Тема сообщения должен быть от 2 до 250 символов")
-    @Schema(description = "Тема сообщения", example = "Замечания по результатам испытаний")
-    @JsonProperty("title")
-    var title: String,
-    @Schema(description = "Список ответных сообщений на данное")
+    @field:Size(min = 2, max = 250, message = "{validation.record.subject.size}")
+    @Schema(description = "swagger.record.subject", example = "Замечания по результатам испытаний")
+    @JsonProperty("subject")
+    var subject: String,
+    @Schema(description = "swagger.record.reply")
     @JsonProperty("reply")
     var reply: Set<RecordDto> = setOf(),
-    @Schema(description = "Сообщение, ответом на которое является данное")
+    @Schema(description = "swagger.record.replyTo")
     @JsonProperty("replyTo")
     var replyTo: RecordDto? = null,
-    @NotEmpty(message = "Дата получения сообщения не может быть пустой")
-    @Schema(description = "Дата получения сообщения")
+    @field:NotEmpty(message = "{validation.record.mailDate.nonEmpty}")
+    @Schema(description = "swagger.record.mailDate")
     @JsonProperty("mailDate")
     var mailDate: LocalDate,
-    @Schema(description = "Краткое содержание сообщения")
+    @Schema(description = "swagger.record.description")
     @JsonProperty("description")
     var description: String? = null,
-    @Schema(description = "Проект с которым связана запись")
+    @Schema(description = "swagger.record.project")
     @JsonProperty("project")
     var project: ProjectDto? = null,
-    @Schema(description = "Сотрудник с которым связана запись")
+    @Schema(description = "swagger.record.employee")
     @JsonProperty("employee")
     var employee: EmployeeDto? = null,
-    @Schema(description = "Контрагент с которым связана запись")
+    @Schema(description = "swagger.record.contractor")
     @JsonProperty("contractor")
     var contractor: ContractorDto? = null,
-    @NotEmpty(message = "У сообщения не может отсутствовать компания")
-    @Schema(description = "Компания с которой связано сообщение")
-    @JsonProperty("company")
-    var company: CompanyDto,
-    @NotEmpty(message = "У сообщения обязательно должен быть указан пользователь который его зарегистрировал")
-    @Schema(description = "Зарегистрировавший сообщение")
+    @field:NotEmpty(message = "{validation.record.organization.nonEmpty}")
+    @Schema(description = "swagger.record.organization")
+    @JsonProperty("organization")
+    var organization: OrganizationDto,
+    @field:NotEmpty(message = "{validation.record.author.nonEmpty}")
+    @Schema(description = "swagger.record.author")
     @JsonProperty("author")
     var author: UserDto,
-    @Schema(description = "Список файлов")
+    @Schema(description = "swagger.file.list")
     @JsonProperty("files")
     val files: List<FileDto> = listOf()
 )

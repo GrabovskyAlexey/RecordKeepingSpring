@@ -4,28 +4,28 @@ import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Service
 import ru.grabovsky.recordkeeping.api.types.ApplicationRoleTypes
 import ru.grabovsky.recordkeeping.api.types.AuthorityTypes
-import ru.grabovsky.recordkeeping.core.entity.db.Company
+import ru.grabovsky.recordkeeping.core.entity.db.Organization
 import ru.grabovsky.recordkeeping.core.entity.db.User
 import ru.grabovsky.recordkeeping.core.services.interfaces.AuthorizationService
-import ru.grabovsky.recordkeeping.core.services.interfaces.CompanyRoleService
+import ru.grabovsky.recordkeeping.core.services.interfaces.OrganizationRoleService
 import java.security.Principal
 
 @Service
 class AuthorizationServiceImpl(
-    private val companyRoleService: CompanyRoleService
+    private val organizationRoleService: OrganizationRoleService
 ) : AuthorizationService {
     override fun userHasAuthority(
         user: User?,
         userId: Long?,
-        company: Company?,
-        companyId: Long?,
+        organization: Organization?,
+        organizationId: Long?,
         authority: AuthorityTypes
     ): Boolean {
-        val role = companyRoleService.getUserCompanyAuthority(
+        val role = organizationRoleService.getUserOrganizationAuthority(
             user?.id ?: userId ?: 0,
-            company?.id ?: companyId ?: 0
+            organization?.id ?: organizationId ?: 0
         )
-        return role.companyRole.authorities.any { it.type == authority }
+        return role.organizationRole.authorities.any { it.type == authority }
     }
 
     override fun isAdmin(principal: Principal): Boolean {

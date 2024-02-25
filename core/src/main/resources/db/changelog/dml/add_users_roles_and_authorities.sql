@@ -7,9 +7,9 @@ VALUES ('admin@test.ru', '$2a$12$2IfNzxSnMcn/rpSKT9EvuOMnIR.x6ZHtXUul6ykKsEjAB8p
        ('user@test.ru', '$2a$12$0lCh0ZBnMJzs0gnluRi1q.00DLal0ILpBWg7xUPlfYv7aKdMQUvPW', 'user', true, true,
         'temp'); -- pass: user;
 
--- changeset grabovsky.alexey:add_company
-INSERT INTO companies (name, enabled)
-VALUES ('Тестовая компания', true);
+-- changeset grabovsky.alexey:add_organization
+INSERT INTO organizations (name, enabled)
+VALUES ('Тестовая организация', true);
 
 
 -- changeset grabovsky.alexey:add_application_roles
@@ -21,7 +21,7 @@ VALUES ('ROLE_UNACTIVATED_USER', 'Зарегистрированный поль�
 -- changeset grabovsky.alexey:add_authorities
 INSERT INTO authorities (type, description)
 VALUES ('EDIT_PROFILE', 'Редактирование профиля'),
-       ('REGISTER_COMPANY', 'Регистрация организации'),
+       ('REGISTER_organization', 'Регистрация организации'),
        ('ADD_RECORD', 'Добавление записей'),
        ('ADD_PROJECT', 'Добавление проектов'),
        ('EDIT_PROJECT', 'Изменение проектов'),
@@ -32,19 +32,19 @@ VALUES ('EDIT_PROFILE', 'Редактирование профиля'),
        ('EDIT_RECORD', 'Редактирование записей'),
        ('INVITE_USER', 'Приглашение пользователй в организацию'),
        ('ADD_USER', 'Добавление пользователей в организацию'),
-       ('EDIT_COMPANY', 'Изменение организации'),
+       ('EDIT_organization', 'Изменение организации'),
        ('EDIT_USER_RIGHT', 'Изменение прав пользователей организации'),
-       ('REMOVE_USER_FROM_COMPANY', 'Открепление пользователей от организации'),
+       ('REMOVE_USER_FROM_organization', 'Открепление пользователей от организации'),
        ('REMOVE_PROJECT', 'Удаление проектов'),
        ('REMOVE_EMPLOYEE', 'Удаление сотрудников'),
        ('REMOVE_CONTRACTOR', 'Удаление контрагентов'),
        ('REMOVE_RECORD', 'Удаление записей');
 
--- changeset grabovsky.alexey:add_company_roles
-INSERT INTO company_roles (name, description)
-VALUES ('ROLE_COMPANY_USER', 'Пользователь организации'),        -- 1
-       ('ROLE_COMPANY_MANAGER', 'Менеджер организации'),         -- 2
-       ('ROLE_COMPANY_ADMIN', 'Администратор организации');      -- 3
+-- changeset grabovsky.alexey:add_organization_roles
+INSERT INTO organization_roles (name, description)
+VALUES ('ROLE_organization_USER', 'Пользователь организации'),        -- 1
+       ('ROLE_organization_MANAGER', 'Менеджер организации'),         -- 2
+       ('ROLE_organization_ADMIN', 'Администратор организации');      -- 3
 
 -- changeset grabovsky.alexey:link_roles_and_authorities
 INSERT INTO roles_authorities (role_id, authority_id)
@@ -76,8 +76,8 @@ INSERT INTO users_roles (user_id, role_id)
 VALUES (1, 3),
        (2, 2);
 
--- changeset grabovsky.alexey:link_company_roles_and_authorities
-INSERT INTO company_roles_authorities (company_role_id, authority_id)
+-- changeset grabovsky.alexey:link_organization_roles_and_authorities
+INSERT INTO organization_roles_authorities (organization_role_id, authority_id)
 VALUES (1, 3),
        (2, 3),
        (2, 4),
@@ -107,8 +107,8 @@ VALUES (1, 3),
        (3, 18),
        (3, 19);
 
--- changeset grabovsky.alexey:link_user_company_roles_and_company
-INSERT INTO companies_users_roles (company_id, user_id, company_role_id) VALUES (1, 2, 3);
+-- changeset grabovsky.alexey:link_user_organization_roles_and_organization
+INSERT INTO organizations_users_roles (organization_id, user_id, organization_role_id) VALUES (1, 2, 3);
 
--- changeset grabovsky.alexey:link_user_and_company
-INSERT INTO users_companies (user_id, company_id) VALUES (2, 1);
+-- changeset grabovsky.alexey:link_user_and_organization
+INSERT INTO users_organizations (user_id, organization_id) VALUES (2, 1);

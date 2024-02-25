@@ -6,7 +6,7 @@ import org.hibernate.annotations.UpdateTimestamp
 import java.time.Instant
 
 /**
- * Entity for company project table
+ * Entity for organization project table
  *
  * @author GrabovskyAlexey
  */
@@ -36,8 +36,8 @@ class Project (
     var updatedAt: Instant? = null
 
     @ManyToOne
-    @JoinColumn(name = "company_id", nullable = false)
-    lateinit var company: Company
+    @JoinColumn(name = "organization_id", nullable = false)
+    lateinit var organization: Organization
 
     @OneToMany(mappedBy = "project")
     val records: List<Record> = listOf()

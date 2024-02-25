@@ -8,8 +8,8 @@ import jakarta.persistence.*
  * @author GrabovskyAlexey
  */
 @Entity
-@Table(name = "company_roles")
-class CompanyRole(
+@Table(name = "organization_roles")
+class OrganizationRole(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     override var id: Long? = null,
@@ -21,8 +21,8 @@ class CompanyRole(
 
     @ManyToMany
     @JoinTable(
-        name = "company_roles_authorities",
-        joinColumns = [JoinColumn(name = "company_role_id")],
+        name = "organization_roles_authorities",
+        joinColumns = [JoinColumn(name = "organization_role_id")],
         inverseJoinColumns = [JoinColumn(name = "authority_id")]
     )
     val authorities: MutableSet<Authority> = mutableSetOf()

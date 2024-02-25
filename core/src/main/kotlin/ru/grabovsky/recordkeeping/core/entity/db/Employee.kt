@@ -6,7 +6,7 @@ import org.hibernate.annotations.UpdateTimestamp
 import java.time.Instant
 
 /**
- * Entity for company employees table
+ * Entity for organization employees table
  *
  * @author GrabovskyAlexey
  */
@@ -30,14 +30,14 @@ class Employee(
     var updatedAt: Instant? = null
 
     @ManyToOne
-    @JoinColumn(name = "company_id", nullable = false)
-    lateinit var company: Company
+    @JoinColumn(name = "organization_id", nullable = false)
+    lateinit var organization: Organization
 
     @OneToMany(mappedBy = "employee")
     val records: List<Record> = listOf()
 
     override fun toString(): String {
-        return "Employee(id=$id, name='$name', company=$company)"
+        return "Employee(id=$id, name='$name', organization=$organization)"
     }
 
 

@@ -7,16 +7,16 @@ CREATE TYPE direction AS ENUM (
     'SPECIAL'
     );
 
-CREATE TABLE companies
+CREATE TABLE organizations
 (
     id         bigserial    NOT NULL,
     name       varchar(250) NOT NULL,
     enabled    boolean      NOT NULL,
     created_at timestamp default current_timestamp,
     updated_at timestamp default current_timestamp,
-    CONSTRAINT company_pkey PRIMARY KEY (id)
+    CONSTRAINT organization_pkey PRIMARY KEY (id)
 );
-COMMENT ON TABLE companies IS 'Таблица компании';
+COMMENT ON TABLE organizations IS 'Таблица организации';
 
 CREATE TABLE users
 (
@@ -37,11 +37,11 @@ CREATE TABLE contractors
 (
     id         bigserial    NOT NULL,
     name       varchar(100) NOT NULL,
-    company_id bigint       NOT NULL,
+    organization_id bigint       NOT NULL,
     created_at timestamp default current_timestamp,
     updated_at timestamp default current_timestamp,
     CONSTRAINT contractors_pkey PRIMARY KEY (id),
-    CONSTRAINT fk_contractors_company_id FOREIGN KEY (company_id) REFERENCES companies (id)
+    CONSTRAINT fk_contractors_organization_id FOREIGN KEY (organization_id) REFERENCES organizations (id)
 );
 COMMENT ON TABLE contractors IS 'Контрагенты';
 
@@ -49,24 +49,24 @@ CREATE TABLE employees
 (
     id         bigserial    NOT NULL,
     name       varchar(100) NOT NULL,
-    company_id bigint       NOT NULL,
+    organization_id bigint       NOT NULL,
     created_at timestamp default current_timestamp,
     updated_at timestamp default current_timestamp,
     CONSTRAINT employee_pkey PRIMARY KEY (id),
-    CONSTRAINT fk_employee_company_id FOREIGN KEY (company_id) REFERENCES companies (id)
+    CONSTRAINT fk_employee_organization_id FOREIGN KEY (organization_id) REFERENCES organizations (id)
 );
-COMMENT ON TABLE employees IS 'Сотрудники компании';
+COMMENT ON TABLE employees IS 'Сотрудники организации';
 
 CREATE TABLE invites
 (
     id          bigserial    NOT NULL,
     email       varchar(100) NOT NULL,
     invite_code varchar(64)  NOT NULL,
-    company_id  bigint       NOT NULL,
+    organization_id  bigint       NOT NULL,
     created_at  timestamp default current_timestamp,
     updated_at  timestamp default current_timestamp,
     CONSTRAINT invite_pkey PRIMARY KEY (id),
-    CONSTRAINT fk_company_invite FOREIGN KEY (company_id) REFERENCES companies (id)
+    CONSTRAINT fk_organization_invite FOREIGN KEY (organization_id) REFERENCES organizations (id)
 );
 COMMENT ON TABLE invites IS 'Приглашения';
 
@@ -76,13 +76,13 @@ CREATE TABLE projects
     short_name  varchar(15) NOT NULL,
     full_name   varchar(250),
     description text,
-    company_id  bigint      NOT NULL,
+    organization_id  bigint      NOT NULL,
     created_at  timestamp default current_timestamp,
     updated_at  timestamp default current_timestamp,
     CONSTRAINT projects_pkey PRIMARY KEY (id),
-    CONSTRAINT fk_projects_company_id FOREIGN KEY (company_id) REFERENCES companies (id)
+    CONSTRAINT fk_projects_organization_id FOREIGN KEY (organization_id) REFERENCES organizations (id)
 );
-COMMENT ON TABLE projects IS 'Проекты компании';
+COMMENT ON TABLE projects IS 'Проекты организации';
 
 CREATE TABLE records
 (
@@ -90,7 +90,7 @@ CREATE TABLE records
     direction     direction    NOT NULL,
     mail_number   varchar(50)  NOT NULL,
     reg_date      date         NOT NULL,
-    title         varchar(250) NOT NULL,
+    subject       varchar(250) NOT NULL,
     reply_id      bigint,
     reply_to_id   bigint,
     mail_date     date         NOT NULL,
@@ -99,14 +99,14 @@ CREATE TABLE records
     project_id    bigint,
     employee_id   bigint,
     contractor_id bigint,
-    company_id    bigint       NOT NULL,
+    organization_id    bigint       NOT NULL,
     author_id     bigint       NOT NULL,
     created_at    timestamp  default current_timestamp,
     updated_at    timestamp  default current_timestamp,
     CONSTRAINT records_pkey PRIMARY KEY (id),
     CONSTRAINT fk_records_reply_id FOREIGN KEY (reply_id) REFERENCES records (id),
     CONSTRAINT fk_records_reply_to_id FOREIGN KEY (reply_to_id) REFERENCES records (id),
-    CONSTRAINT fk_records_company_id FOREIGN KEY (company_id) REFERENCES companies (id),
+    CONSTRAINT fk_records_organization_id FOREIGN KEY (organization_id) REFERENCES organizations (id),
     CONSTRAINT fk_records_contractors_id FOREIGN KEY (contractor_id) REFERENCES contractors (id),
     CONSTRAINT fk_records_employee_id FOREIGN KEY (employee_id) REFERENCES employees (id),
     CONSTRAINT fk_records_project_id FOREIGN KEY (project_id) REFERENCES projects (id),
@@ -136,16 +136,16 @@ CREATE TABLE roles
 );
 COMMENT ON TABLE roles IS 'Таблица для ролей пользователей';
 
-CREATE TABLE company_roles
+CREATE TABLE organization_roles
 (
     id          bigserial    NOT NULL,
     name        varchar(250) NOT NULL,
     description varchar(250) NOT NULL,
     created_at  timestamp DEFAULT (current_timestamp),
     updated_at  timestamp DEFAULT (current_timestamp),
-    CONSTRAINT company_roles_pkey PRIMARY KEY (id)
+    CONSTRAINT organization_roles_pkey PRIMARY KEY (id)
 );
-COMMENT ON TABLE company_roles IS 'Таблица для ролей организаций';
+COMMENT ON TABLE organization_roles IS 'Таблица для ролей организаций';
 
 CREATE TABLE authorities
 (
@@ -191,15 +191,15 @@ CREATE TABLE roles_authorities
 );
 COMMENT ON TABLE roles_authorities IS 'ManyToMany для связи ролей и прав';
 
-CREATE TABLE company_roles_authorities
+CREATE TABLE organization_roles_authorities
 (
     authority_id    bigint NOT NULL,
-    company_role_id bigint NOT NULL,
-    CONSTRAINT company_roles_authorities_pkey PRIMARY KEY (authority_id, company_role_id),
-    CONSTRAINT fk_company_role_authority_id FOREIGN KEY (company_role_id) REFERENCES company_roles (id),
-    CONSTRAINT fk_authority_company_role_id FOREIGN KEY (authority_id) REFERENCES authorities (id)
+    organization_role_id bigint NOT NULL,
+    CONSTRAINT organization_roles_authorities_pkey PRIMARY KEY (authority_id, organization_role_id),
+    CONSTRAINT fk_organization_role_authority_id FOREIGN KEY (organization_role_id) REFERENCES organization_roles (id),
+    CONSTRAINT fk_authority_organization_role_id FOREIGN KEY (authority_id) REFERENCES authorities (id)
 );
-COMMENT ON TABLE company_roles_authorities IS 'ManyToMany для связи ролей и прав организации';
+COMMENT ON TABLE organization_roles_authorities IS 'ManyToMany для связи ролей и прав организации';
 
 CREATE TABLE user_actions
 (
@@ -213,24 +213,24 @@ CREATE TABLE user_actions
 );
 COMMENT ON TABLE user_actions IS 'Логирование действий пользователей';
 
-CREATE TABLE users_companies
+CREATE TABLE users_organizations
 (
     user_id    bigint NOT NULL,
-    company_id bigint NOT NULL,
-    CONSTRAINT users_companies_pkey PRIMARY KEY (user_id, company_id),
-    CONSTRAINT fk_company_user_id FOREIGN KEY (company_id) REFERENCES companies (id),
-    CONSTRAINT fk_user_company_id FOREIGN KEY (user_id) REFERENCES users (id)
+    organization_id bigint NOT NULL,
+    CONSTRAINT users_organizations_pkey PRIMARY KEY (user_id, organization_id),
+    CONSTRAINT fk_organization_user_id FOREIGN KEY (organization_id) REFERENCES organizations (id),
+    CONSTRAINT fk_user_organization_id FOREIGN KEY (user_id) REFERENCES users (id)
 );
-COMMENT ON TABLE users_companies IS 'ManyToMany для связи пользователей и компаний';
+COMMENT ON TABLE users_organizations IS 'ManyToMany для связи пользователей и организаций';
 
-CREATE TABLE companies_users_roles
+CREATE TABLE organizations_users_roles
 (
-    company_id      bigint,
+    organization_id      bigint,
     user_id         bigint,
-    company_role_id bigint,
-    CONSTRAINT companies_users_roles_pkey PRIMARY KEY (company_id, user_id, company_role_id),
-    CONSTRAINT fk_companies_users_roles_company_id FOREIGN KEY (company_id) REFERENCES companies (id),
-    CONSTRAINT fk_companies_users_roles_user_id FOREIGN KEY (user_id) REFERENCES users (id),
-    CONSTRAINT fk_companies_users_roles_role_id FOREIGN KEY (company_role_id) REFERENCES company_roles (id)
+    organization_role_id bigint,
+    CONSTRAINT organizations_users_roles_pkey PRIMARY KEY (organization_id, user_id, organization_role_id),
+    CONSTRAINT fk_organizations_users_roles_organization_id FOREIGN KEY (organization_id) REFERENCES organizations (id),
+    CONSTRAINT fk_organizations_users_roles_user_id FOREIGN KEY (user_id) REFERENCES users (id),
+    CONSTRAINT fk_organizations_users_roles_role_id FOREIGN KEY (organization_role_id) REFERENCES organization_roles (id)
 );
-COMMENT ON TABLE companies_users_roles IS 'ManyToMany для связи пользователей, ролей и компаний';
+COMMENT ON TABLE organizations_users_roles IS 'ManyToMany для связи пользователей, ролей и организаций';

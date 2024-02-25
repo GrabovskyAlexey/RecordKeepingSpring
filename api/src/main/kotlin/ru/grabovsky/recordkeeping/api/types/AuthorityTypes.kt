@@ -8,7 +8,7 @@ package ru.grabovsky.recordkeeping.api.types
  */
 enum class AuthorityTypes {
     EDIT_PROFILE,
-    REGISTER_COMPANY,
+    REGISTER_ORGANIZATION,
     ADD_RECORD,
     ADD_PROJECT,
     EDIT_PROJECT,
@@ -19,9 +19,9 @@ enum class AuthorityTypes {
     EDIT_RECORD,
     INVITE_USER,
     ADD_USER,
-    EDIT_COMPANY,
+    EDIT_ORGANIZATION,
     EDIT_USER_RIGHT,
-    REMOVE_USER_FROM_COMPANY,
+    REMOVE_USER_FROM_ORGANIZATION,
     REMOVE_PROJECT,
     REMOVE_EMPLOYEE,
     REMOVE_CONTRACTOR,

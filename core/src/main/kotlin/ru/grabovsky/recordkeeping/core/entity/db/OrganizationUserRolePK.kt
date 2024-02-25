@@ -12,29 +12,29 @@ import java.io.Serializable
  * @created 27.01.2024 17:21
  */
 @Embeddable
-class CompanyUserRolePK: Serializable {
+class OrganizationUserRolePK: Serializable {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false, updatable = false)
     lateinit var user: User
 
     @ManyToOne
-    @JoinColumn(name = "company_id", nullable = false, updatable = false)
-    lateinit var company: Company
+    @JoinColumn(name = "organization_id", nullable = false, updatable = false)
+    lateinit var organization: Organization
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as CompanyUserRolePK
+        other as OrganizationUserRolePK
 
         if (user.id != other.user.id) return false
-        if (company.id != other.company.id) return false
+        if (organization.id != other.organization.id) return false
 
         return true
     }
 
     override fun hashCode(): Int {
         var result = user.hashCode()
-        result = 31 * result + company.hashCode()
+        result = 31 * result + organization.hashCode()
         return result
     }
 

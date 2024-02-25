@@ -6,13 +6,13 @@ import org.hibernate.annotations.UpdateTimestamp
 import java.time.Instant
 
 /**
- * Entity for company info table
+ * Entity for organization info table
  *
  * @author GrabovskyAlexey
  */
 @Entity
-@Table(name = "companies")
-class Company(
+@Table(name = "organizations")
+class Organization(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     override var id: Long? = null
@@ -28,19 +28,19 @@ class Company(
     @Column(name = "updated_at")
     var updatedAt: Instant? = null
 
-    @OneToMany(mappedBy = "company")
+    @OneToMany(mappedBy = "organization")
     val contractors: List<Contractor> = listOf()
 
-    @OneToMany(mappedBy = "company")
+    @OneToMany(mappedBy = "organization")
     val employees: List<Employee> = listOf()
 
-    @OneToMany(mappedBy = "company")
+    @OneToMany(mappedBy = "organization")
     val invites: List<Invite> = listOf()
 
-    @OneToMany(mappedBy = "company")
+    @OneToMany(mappedBy = "organization")
     val projects: List<Project> = listOf()
 
-    @OneToMany(mappedBy = "company")
+    @OneToMany(mappedBy = "organization")
     val records: List<Record> = listOf()
 
     @Column(name = "enabled", nullable = false)
@@ -48,17 +48,13 @@ class Company(
 
     @ManyToMany
     @JoinTable(
-        name = "users_companies",
+        name = "users_organizations",
         inverseJoinColumns = [JoinColumn(name = "user_id")],
-        joinColumns = [JoinColumn(name = "company_id")]
+        joinColumns = [JoinColumn(name = "organization_id")]
     )
     val users: MutableSet<User> = mutableSetOf()
 
-//    @ElementCollection
-//    @CollectionTable(name = "companies_users_roles", joinColumns = [JoinColumn(name = "company_id")])
-//    val companyUserRole: MutableSet<CompanyUserRolePK> = mutableSetOf();
-
     override fun toString(): String {
-        return "Company(id=$id, name='$name', enabled=$isEnabled)"
+        return "Organization(id=$id, name='$name', enabled=$isEnabled)"
     }
 }

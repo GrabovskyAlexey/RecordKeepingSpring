@@ -1,7 +1,7 @@
 package ru.grabovsky.recordkeeping.core.services.interfaces
 
 import ru.grabovsky.recordkeeping.api.types.AuthorityTypes
-import ru.grabovsky.recordkeeping.core.entity.db.Company
+import ru.grabovsky.recordkeeping.core.entity.db.Organization
 import ru.grabovsky.recordkeeping.core.entity.db.User
 import java.security.Principal
 
@@ -16,8 +16,8 @@ interface AuthorizationService {
     fun userHasAuthority(
         user: User? = null,
         userId: Long? = null,
-        company: Company? = null,
-        companyId: Long? = null,
+        organization: Organization? = null,
+        organizationId: Long? = null,
         authority: AuthorityTypes
     ): Boolean
 

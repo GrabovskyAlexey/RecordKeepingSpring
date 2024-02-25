@@ -6,7 +6,7 @@ import org.hibernate.annotations.UpdateTimestamp
 import java.time.Instant
 
 /**
- * Entity for company invite table
+ * Entity for organization invite table
  *
  * @author GrabovskyAlexey
  */
@@ -33,10 +33,10 @@ class Invite (
     var updatedAt: Instant? = null
 
     @ManyToOne
-    @JoinColumn(name = "company_id", nullable = false)
-    lateinit var company: Company
+    @JoinColumn(name = "organization_id", nullable = false)
+    lateinit var organization: Organization
 
     override fun toString(): String {
-        return "Invite(id=$id, email='$email', inviteCode='$inviteCode', company=$company)"
+        return "Invite(id=$id, email='$email', inviteCode='$inviteCode', organization=$organization)"
     }
 }
